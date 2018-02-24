@@ -1,0 +1,43 @@
+
+h1,h2,h3 {font-family: Arial, sans-serif;}   
+p, table, li, address {                 /* apply to all these tags */
+	font-family: "Courier New";	     /* quote values containing spaces */ 
+	margin-left: 15pt;
+	border = 0;                  /* specify indentation */
+}
+
+p, li, th, td {
+	font-size: 80%;
+} 
+     /* 80% of size in containing element */
+th {
+	background-color:#D9D9D9
+}  /* colors can be specified in hex */
+
+body { 
+	background-color:#EBEDEF;
+}
+
+a:link    {
+	color:darkred
+}	     /* an unvisited link */
+
+a:visited {
+	color:darkred
+}	     /* a link that has been visited */
+
+a:active  {
+	color:red
+}		     /* a link now being visited */
+
+a:hover   {
+	color:red
+}		     /* when the mouse hovers over it */
+
+table, th, td {
+	border: 1px solid black;
+}
+
+#submitButton {
+	margin-left: 25px;
+}
