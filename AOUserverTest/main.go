@@ -12,6 +12,7 @@ func settings(res http.ResponseWriter, req *http.Request) {
     deactivate := req.FormValue("deactivate")
     reactiveate := req.FormValue("reactiveate")
 
+   //hi
    // var databaseUsername string
    // var databasePassword string
     if reactiveate != nil{
