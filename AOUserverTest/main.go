@@ -105,7 +105,6 @@ func main() {
 }
 
 func settings(res http.ResponseWriter, req *http.Request) {
-    fmt.Println("TESTING")
     if req.Method != "POST" {
         http.ServeFile(res, req, "settings.html")
         return
@@ -117,73 +116,63 @@ func settings(res http.ResponseWriter, req *http.Request) {
     
     deactivate := req.FormValue("deactivate")
     reactiveate := req.FormValue("reactiveate")
+    fName := req.FormValue("fName")
+    lName := req.FormValue("lName")
 
-   //hi
-   // var databaseUsername string
-   // var databasePassword string
-    if reactiveate != nil{
+    if reactiveate == "reactiveate"{
         err := db.QueryRow("INSET UserName FROM allofusdbmysql2.UserTable WHERE Username=?", userName)
-        fmt.Println()
         if err != nil {
             http.Redirect(res, req, "/login", 301)
             return
         }
     }
-    if deactivate != nil{
+    if deactivate == "deactivate"{
         err := db.QueryRow("REMOVE UserName FROM allofusdbmysql2.UserTable WHERE Username=?", userName)//.Scan(&databaseUsername, &databasePassword)
-            fmt.Println()
             if err != nil {
                 http.Redirect(res, req, "/login", 301)
                 return
         }
     }
-    if changeName != nil{
+    if changeName == "changeName"{
         err := db.QueryRow("UPDATE allofusdbmysql2.UserTable SET fName, lName WHERE Username=?", lName, fName)//.Scan(&databaseUsername, &databasePassword)
-            fmt.Println()
             if err != nil {
                 http.Redirect(res, req, "/login", 301)
                 return
         }
     }
-    if changeUserName != nil{
+    if changeUserName == "changeUserName"{
         err := db.QueryRow("UPDATE allofusdbmysql2.UserTable SET Username WHERE Username=?", userName)//.Scan(&databaseUsername, &databasePassword)
-            fmt.Println()
             if err != nil {
                 http.Redirect(res, req, "/login", 301)
                 return
         }
     }
-
 }
 
 func profile(res http.ResponseWriter, req *http.Request) {
-    fmt.Println("TESTING")
     if req.Method != "POST" {
         http.ServeFile(res, req, "profile.html")
         return
     }
-
-    username := req.FormValue("username")
-
-    var databaseUsername string
     
-    err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
+    username := req.FormValue("userName")
+    //rating := req.FormValue("stat-info")
+
+    
+    err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username)//.Scan(&databaseUsername)
     fmt.Println()
     if err != nil {
         http.Redirect(res, req, "/login", 301)
         return
     }
-    fmt.Println("TESTING"+username+"Sdfsv")
-    fmt.Println("TESTING"+databaseUsername+"Sdfsv")
-    fmt.Println("TESTING")
-    err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
+    
+    /*err := db.QueryRow("INSERT INTO allofusdbmysql2.stats (PostID, statValue) VALUES (?, ?)", num rating)//.Scan(&databaseUsername)
+    fmt.Println()
     if err != nil {
         http.Redirect(res, req, "/login", 301)
-        
         return
     }
-    fmt.Println("TESTING"+databaseUsername)
-    res.Write([]byte("Hello" + databaseUsername))
+    num+1*/
 
 }
 /*
