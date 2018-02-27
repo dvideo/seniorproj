@@ -3,6 +3,9 @@
 
 	<head>
 		<title>{{ .userName}} "'s" Profile</title>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
 		<meta name="description" content="Layout of the users date in one location">
 		<style>
 		.coverArt {
@@ -307,7 +310,7 @@
 			function sendStatAvg() {
 				setInterval(
 					function sendAvg(){ 
-						/**alert("Calculating stat average...");
+						alert("Calculating stat average...");
 						resetStat(); 
 					}, 3000);
 			}
@@ -424,7 +427,7 @@
 		function commentFunc() {
 			var x = document.getElementById("commentB");
 			if (x.innerHTML === "") {
-				x.innerHTML = "<textarea></textarea><button >submit</button><br>";
+				x.innerHTML = "<textarea></textarea><button><i class='fa fa-mail-reply'></i></button><br>";
 			} else {
 				x.innerHTML = "";
 			}
@@ -441,7 +444,6 @@
 		<style>
 		
 		#myInput {
-			background-image: url('/img/search.png');
 			background-position: 10px 12px;
 			background-repeat: no-repeat;
 			font-size: 16px;
@@ -472,38 +474,6 @@
 		}
 		</style>    
 		
-
-		<link rel="stylesheet" type="text/css" href="format.css">
-	</head>
-	
-	<body>
-	
-	<!-- T<img src="photo.png" alt="coverArt" style="width:50%"> -->
-	 <img class="deviceWidth" src="http://westchesterluxuries.com/email/banneremail.jpg" alt="" border="0" style="width:49%">
-		<div class="coverArt">
-			<div class="container">
-			<img src="photo.png" alt="profilePicture" style="width:100%">
-			<h1>Hello {{ .userName}}</h1>
-			<a href="settings.html">Go to Settings</a>
-			</div>
-		</div>
-		<br>
-		<h3>Recents Posts</h3>
-		<input type="text" id="myInput" onkeyup="searchFriend()" placeholder="Search for your friends..." style="float:right;">
-		<br>
-		<br>
-		<br>
-		<ul id="myUL" style="float:right;">
-			<li><a href="#">Joshua</a></li>
-			<li><a href="#">Mike</a></li>
-
-			<li><a href="#">Johnny</a></li>
-			<li><a href="#">Elijah</a></li>
-
-			<li><a href="#">Chris</a></li>
-			<li><a href="#">Sal</a></li>
-		</ul>
-
 		<script>
 		function searchFriend() {
 				var input, ul, li, a, i;
@@ -522,6 +492,43 @@
 		</script>
 		
 		
+
+		<link rel="stylesheet" type="text/css" href="format.css">
+	</head>
+	
+	<body>
+	
+	<!-- T<img src="photo.png" alt="coverArt" style="width:50%"> -->
+	<img src="http://westchesterluxuries.com/email/banneremail.jpg" alt="" border="0" style="width:49%">
+	
+		<div class="coverArt">
+			<div class="container">
+			<img src="photo.png" alt="profilePicture" style="width:100%">
+			<h1>Hello {{ .userName}}</h1>
+			<a href="settings.html"><i class="fa fa-cog fa-spin"></i> Settings</a>
+			<a href="index.html"><i class="fa fa-power-off"></i> Logout</a>
+			</div>
+		</div>
+		<br>
+		<h3>Recents Posts</h3>
+	<!--	<input type="text" id="myInput" onkeyup="searchFriend()" placeholder="Search for your friends..." style="float:right;">
+		<br>
+		<br>
+		<br>
+		<ul id="myUL" style="float:right;">
+			<li><a href="#">{{ .fName .lName}}</a></li>
+			<li><a href="#">Mike</a></li>
+
+			<li><a href="#">Johnny</a></li>
+			<li><a href="#">Elijah</a></li>
+
+			<li><a href="#">Chris</a></li>
+			<li><a href="#">Sal</a></li>
+		</ul>
+
+		
+		-->
+		
 		
 		<!--   Sends stat# and calculate average every 10 seconds -->
 			<button onclick="sendStatAvg()">Try it</button>
@@ -538,15 +545,14 @@
 					</div>
 				</div>
 				
-				<button type="share">Share</button>
-				
-		
-				<button type="meme">Meme</button>
+				<button type="share"><i class="fa fa-share"></i>Share</button>
+				<button type="meme"><i class="fa fa-image"></i> Meme</button>
 				<script src="javascipt/meme.js"></script>
-				<button onclick="commentFunc()">Comment</button>
+				<button onclick="commentFunc()"><i class="fa fa-comment"></i> Comment</button>
 				<div id="commentB">
 				</div>
 		</div>	
+		
 		
 	
 	</body>
