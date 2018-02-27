@@ -13,6 +13,7 @@ var db *sql.DB
 var err error
 
 func signupPage(res http.ResponseWriter, req *http.Request) {
+    fmt.Println("TESTING signup")
     if req.Method != "POST" {
         http.ServeFile(res, req, "signup.html")
         return
@@ -38,8 +39,8 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
             http.Error(res, "Server error, unable to create your account.", 500)
             return
         }
-
-        res.Write([]byte("User created!"))
+        fmt.Println("User created!")
+        res.Write([]byte("User created!")) //not sure if this is working?
         return
     case err != nil:
         http.Error(res, "Server error, unable to create your account.", 500)
@@ -50,7 +51,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 }
 
 func loginPage(res http.ResponseWriter, req *http.Request) {
-    fmt.Println("TESTING")
+    //fmt.Println("TESTING login")
     if req.Method != "POST" {
         http.ServeFile(res, req, "login.html")
         return
@@ -63,22 +64,20 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     var databasePassword string
     
     err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
-    fmt.Println()
-    if err != nil {
+    if err != nil { // see below comment - remove the below if statement to get code to work
         http.Redirect(res, req, "/login", 301)
         return
     }
-    fmt.Println("TESTING"+username+"Sdfsv")
-    fmt.Println("TESTING"+databaseUsername+"Sdfsv")
-    fmt.Println("TESTING")
-    err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
-    if err != nil {
-        http.Redirect(res, req, "/login", 301)
-        
-        return
-    }
-    fmt.Println("TESTING"+databaseUsername)
-    res.Write([]byte("Hello" + databaseUsername))
+    //fmt.Println("TESTING"+username)
+    fmt.Println("TESTING "+databaseUsername)
+    //fmt.Println("TESTING")
+    err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))  //for some reason wont work when both of the if err statements are in
+    //if err != nil {
+    //    http.Redirect(res, req, "/login", 301)
+    //    return
+    //}
+    fmt.Println("Hello " + databaseUsername)
+    res.Write([]byte("Hello " + databaseUsername))
 
 }
 
@@ -99,7 +98,7 @@ func main() {
     }
     fmt.Println("TESTING")
     http.HandleFunc("/signup", signupPage)
-    fmt.Println("TESTING")
+    //fmt.Println("TESTING")
     http.HandleFunc("/login", loginPage)
     http.HandleFunc("/", homePage)
     http.ListenAndServe(":8080", nil)
