@@ -37,7 +37,7 @@ CREATE TABLE allofusdbmysql2.userIPAddress (
   );
 
 CREATE TABLE allofusdbmysql2.profileTable (
-  Userid VARCHAR(255) NULL AUTO_INCREMENT,
+  Userid INT NOT NULL AUTO_INCREMENT,
   Profilepic VARCHAR(45) NULL,
   Cover1 VARCHAR(255) NULL,
   Cover2 VARCHAR(255) NULL,
@@ -53,7 +53,8 @@ CREATE TABLE allofusdbmysql2.profileTable (
   );
 
 CREATE TABLE allofusdbmysql2.userPost (
-  PostID VARCHAR(255) NULL,
+  PostID INT NOT NULL AUTO_INCREMENT,
+  Userid INT NOT NULL,
   Author VARCHAR(255) NULL,
   Recipient VARCHAR(255) NULL,
   Photo VARCHAR(255) NULL,
@@ -61,18 +62,18 @@ CREATE TABLE allofusdbmysql2.userPost (
   Meme1 VARCHAR(255) NULL,
   Meme2 VARCHAR(255) NULL,
   TimeAccountCreated INT NULL,
-  PRIMARY KEY (Userid)
+  PRIMARY KEY (PostID)
   );
 
 CREATE TABLE allofusdbmysql2.statPost (
-  PostID VARCHAR(255) NULL,
+  PostID INT NOT NULL,
   StatAvg INT NULL,
   TimeCreated INT NULL,
   PRIMARY KEY (PostID)
   );
 
 CREATE TABLE allofusdbmysql2.stats (
-  PostID VARCHAR(255) NULL,
+  PostID INT NOT NULL,
   UseridStat VARCHAR(255) NULL,
   StatValue VARCHAR(255) NULL,
   TimeCreated INT NULL,
