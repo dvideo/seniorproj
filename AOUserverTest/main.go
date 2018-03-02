@@ -129,11 +129,11 @@ func SendMessagemain(usr string) {
     }
     fmt.Println(databaseLocation)
     fmt.Println(IPfunction())
-    if(databaseLocation!=IPfunction()){
+    if(databaseLocation==IPfunction()){
         issue = "Device"
         Temp=1
     }
-    if(databaseDevice!="Computer"){//temp need to get MAC and STORE MAC in database
+    if(databaseDevice!="Computer"){ //temp need to get MAC and STORE MAC in database
         Temp=1
     }
     if(Temp==1){
@@ -224,14 +224,14 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     case err == sql.ErrNoRows:
         hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
         if err != nil {
-            http.Error(res, "Server error, unable to create your account.", 500)
+            http.Error(res, "Server3 error, unable to create your account.", 500)
             return
         }
 
-        _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(Username, Password, Location) VALUES(?, ?, ?)", username, hashedPassword,IPfunction())
+        _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(Username, Password) VALUES(?, ?)", username, hashedPassword)
         
         if err != nil {
-            http.Error(res, "Server error, unable to create your account.", 500)
+            http.Error(res, "S1erver error, unable to create your account.", 500)
             return
         }
         fmt.Println("User created!")
