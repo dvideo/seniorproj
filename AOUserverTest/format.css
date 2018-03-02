@@ -84,3 +84,8 @@ footer {
 	width: 150px;
 	font-size: 20px;
 }
+
+#homebutton {
+	color: white;
+	float: left;
+}
