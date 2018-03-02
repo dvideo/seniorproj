@@ -41,3 +41,31 @@ table, th, td {
 #submitButton {
 	margin-left: 25px;
 }
+
+header {
+	background-color: black;
+	margin-left: -8px;
+	width: 100%;
+}
+
+footer {
+	background-color: black;
+	position: fixed;
+	bottom: 30px;
+	margin-bottom: -30px;
+	width: 100%;
+	margin-left: -8px;
+	text-align: center;
+}
+#title {
+	padding-left: 10px;
+	color: white;
+}
+
+#footertext {
+	color: white;
+}
+
+#homepagelinks li{
+	list-style: none;
+}
