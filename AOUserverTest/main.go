@@ -110,30 +110,36 @@ func IPfunction() (addr string){
             if err != nil {
                 fmt.Println(err)
             }
-            /*
-        fmt.Println("\n==== IP Geolocation Info ====\n")
-            fmt.Println("IP address:\t", geo.Ip)
-            fmt.Println("Country Code:\t", geo.CountryCode)
-            fmt.Println("Country Name:\t", geo.CountryName)
-            fmt.Println("Zip Code:\t", geo.Zipcode)
-            fmt.Println("Latitude:\t", geo.Lat)
-            fmt.Println("Longitude:\t", geo.Lon)
-            fmt.Println("Metro Code:\t", geo.MetroCode)
-            fmt.Println("Area Code:\t", geo.AreaCode)
-        */
         fmt.Println("City:\t",geo.City)
-        return geo.Ip
+        return geo.City
         
 }
-func SendMessagemain() {
+func SendMessagemain(usr string) {
     fmt.Println(IPfunction())
     fmt.Println(getMacAddr()) //MAC ADDRESS
-    var usr string = "Johnny" //get the user first name and/or last name 
+    var databaseUsername string
+    var databaseLocation string
+    var databaseDevice string
+    var databaseEmail string
+    var Temp int = 0 
     var issue string = "Location" //default location if its a new device change
-    
+    err := db.QueryRow("SELECT Username, Location, Device,Email FROM allofusdbmysql2.UserTable WHERE Username=?", usr).Scan(&databaseUsername, &databaseLocation, &databaseDevice, &databaseEmail)
+    if err != nil {
+        fmt.Println("fill", err)
+    }
+    fmt.Println(databaseLocation)
+    fmt.Println(IPfunction())
+    if(databaseLocation!=IPfunction()){
+        issue = "Device"
+        Temp=1
+    }
+    if(databaseDevice!="Computer"){//temp need to get MAC and STORE MAC in database
+        Temp=1
+    }
+    if(Temp==1){
     mail := Mail{}
     mail.senderId = "allofusnoreply@gmail.com" //defaul allofus email
-    mail.toIds = []string{"allofusnoreply@gmail.com"} //users we are sending alerts to email.
+    mail.toIds = []string{databaseEmail} //users we are sending alerts to email.
     mail.subject = "New "+issue+" Alert"
     mail.body = "Dear "+usr+", Your AllOfUs account was just signed in from a new "+issue+". You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasnt you please log in to your account and view your activity in the security section"
 
@@ -196,6 +202,7 @@ func SendMessagemain() {
     client.Quit()
 
     log.Println("Mail sent successfully")
+    }
 
 }
 
@@ -221,7 +228,8 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
             return
         }
 
-        _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(Username, Password) VALUES(?, ?)", username, hashedPassword)
+        _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(Username, Password, Location) VALUES(?, ?, ?)", username, hashedPassword,IPfunction())
+        
         if err != nil {
             http.Error(res, "Server error, unable to create your account.", 500)
             return
@@ -253,9 +261,9 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
     if err != nil { // see below comment - remove the below if statement to get code to work
         http.Redirect(res, req, "/login", 301)
-        SendMessagemain();
         return
     }
+    SendMessagemain(databaseUsername);
     //fmt.Println("TESTING"+username)
     fmt.Println("TESTING "+databaseUsername)
     //fmt.Println("TESTING")
