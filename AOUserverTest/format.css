@@ -68,4 +68,19 @@ footer {
 
 #homepagelinks li{
 	list-style: none;
+	padding-top: 15px;
+}
+
+#loginLink {
+	margin-top: 20px;
+	height:  20px;
+	width: 150px;
+	font-size: 20px;
+}
+
+#signupLink {
+	margin-top: 20px;
+	height:  20px;
+	width: 150px;
+	font-size: 20px;
 }
