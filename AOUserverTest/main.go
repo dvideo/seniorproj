@@ -101,6 +101,9 @@ func main() {
     //fmt.Println("TESTING")
     http.HandleFunc("/login", loginPage)
     http.HandleFunc("/", homePage)
+     http.HandleFunc("/settings", settings)
+    http.HandleFunc("/locations", locations)
+    http.HandleFunc("/profile", profile)
     http.ListenAndServe(":8080", nil)
 }
 
@@ -175,6 +178,54 @@ func profile(res http.ResponseWriter, req *http.Request) {
     num+1*/
 
 }
+
+func locations(res http.ResponseWriter, req *http.Request) {
+    if req.Method != "POST" {
+        http.ServeFile(res, req, "locations.html")
+        return
+    }
+    
+    //if(req.FormValue("deleteLocations")){
+        err := db.QueryRow("DROP TABLE allofusdbmysql2.userLocation")
+        fmt.Println()
+        if err != nil {
+            http.Redirect(res, req, "/login", 301)
+            return
+        }
+    //}
+    
+    /*
+    rows, err := db.Query("SELECT * FROM allofusdbmysql2.userLocation")
+    if err != nil {
+        http.Redirect(res, req, "/login", 301)
+        return
+    }
+    
+    
+    var Location string
+    
+    for rows.Next(){
+        err = rows.Scan(&Location)
+        if err != nil {
+            http.Redirect(res, req, "/login", 301)
+            return
+        }      
+    }
+    
+    */
+    var fName string
+    var lName string
+   // username := req.FormValue("userName")
+    
+   db.QueryRow("SELECT fName, lName FROM allofusdbmysql2.UserTable WHERE Username=?", fName, lName)//.Scan(&databaseUsername)
+    if err != nil {
+        http.Redirect(res, req, "/login", 301)
+        return
+    }
+
+
+}
+
 /*
 
 package main 
