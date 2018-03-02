@@ -8,9 +8,196 @@ import "golang.org/x/crypto/bcrypt"
 
 import "net/http"
 import "fmt"
+import("crypto/tls"
+    "encoding/json"
+    "io/ioutil"
+    "net"
+    "bytes"
+    "log"
+    "net/smtp"
+    "strings"
+    "github.com/rdegges/go-ipify"
+    ) 
 
 var db *sql.DB
 var err error
+type GeoIP struct {
+        // The right side is the name of the JSON variable
+    Ip          string  `json:"ip"`
+    CountryCode string  `json:"country_code"`
+    CountryName string  `json:"country_name""`
+    RegionCode  string  `json:"region_code"`
+    RegionName  string  `json:"region_name"`
+    City        string  `json:"city"`
+    Zipcode     string  `json:"zipcode"`
+    Lat         float32 `json:"latitude"`
+    Lon         float32 `json:"longitude"`
+    MetroCode   int     `json:"metro_code"`
+    AreaCode    int     `json:"area_code"`
+}
+
+
+type Mail struct {
+    senderId string
+    toIds    []string
+    subject  string
+    body     string
+}
+var (
+    address  string
+    geo      GeoIP
+    response *http.Response
+    body     []byte
+)
+
+type SmtpServer struct {
+    host string
+    port string
+}
+
+func (s *SmtpServer) ServerName() string {
+    return s.host + ":" + s.port
+}
+
+func (mail *Mail) BuildMessage() string {
+    message := ""
+    message += fmt.Sprintf("From: %s\r\n", mail.senderId)
+    if len(mail.toIds) > 0 {
+        message += fmt.Sprintf("To: %s\r\n", strings.Join(mail.toIds, ";"))
+    }
+
+    message += fmt.Sprintf("Subject: %s\r\n", mail.subject)
+    message += "\r\n" + mail.body
+
+    return message
+}
+func getMacAddr() (addr string) {
+    interfaces, err := net.Interfaces()
+    if err == nil {
+        for _, i := range interfaces {
+            if i.Flags&net.FlagUp != 0 && bytes.Compare(i.HardwareAddr, nil) != 0 {
+                // Don't use random as we have a real address
+                addr = i.HardwareAddr.String()
+                break
+            }
+        }
+    }
+    return
+}
+func IPfunction() (addr string){
+    ip, err := ipify.GetIp()
+            if err != nil {
+                fmt.Println("Couldn't get my IP address:", err)
+            } else {
+                //fmt.Println("My IP address is:", ip)
+            }
+        address = ip
+        response, err = http.Get("https://freegeoip.net/json/" + address)
+            if err != nil {
+                fmt.Println(err)
+            }
+            defer response.Body.Close()
+        // response.Body() is a reader type. We have
+            // to use ioutil.ReadAll() to read the data
+            // in to a byte slice(string)
+            body, err = ioutil.ReadAll(response.Body)
+            if err != nil {
+                fmt.Println(err)
+            }
+
+            // Unmarshal the JSON byte slice to a GeoIP struct
+            err = json.Unmarshal(body, &geo)
+            if err != nil {
+                fmt.Println(err)
+            }
+            /*
+        fmt.Println("\n==== IP Geolocation Info ====\n")
+            fmt.Println("IP address:\t", geo.Ip)
+            fmt.Println("Country Code:\t", geo.CountryCode)
+            fmt.Println("Country Name:\t", geo.CountryName)
+            fmt.Println("Zip Code:\t", geo.Zipcode)
+            fmt.Println("Latitude:\t", geo.Lat)
+            fmt.Println("Longitude:\t", geo.Lon)
+            fmt.Println("Metro Code:\t", geo.MetroCode)
+            fmt.Println("Area Code:\t", geo.AreaCode)
+        */
+        fmt.Println("City:\t",geo.City)
+        return geo.Ip
+        
+}
+func SendMessagemain() {
+    fmt.Println(IPfunction())
+    fmt.Println(getMacAddr()) //MAC ADDRESS
+    var usr string = "Johnny" //get the user first name and/or last name 
+    var issue string = "Location" //default location if its a new device change
+    
+    mail := Mail{}
+    mail.senderId = "allofusnoreply@gmail.com" //defaul allofus email
+    mail.toIds = []string{"allofusnoreply@gmail.com"} //users we are sending alerts to email.
+    mail.subject = "New "+issue+" Alert"
+    mail.body = "Dear "+usr+", Your AllOfUs account was just signed in from a new "+issue+". You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasnt you please log in to your account and view your activity in the security section"
+
+    messageBody := mail.BuildMessage()
+
+    smtpServer := SmtpServer{host: "smtp.gmail.com", port: "465"}
+
+    log.Println(smtpServer.host)
+    //build an auth                            Password
+    auth := smtp.PlainAuth("", mail.senderId, "AllOfUsNoRep", smtpServer.host)
+
+    // Gmail will reject connection if it's not secure
+    // TLS config
+    tlsconfig := &tls.Config{
+        InsecureSkipVerify: true,
+        ServerName:         smtpServer.host,
+    }
+
+    conn, err := tls.Dial("tcp", smtpServer.ServerName(), tlsconfig)
+    if err != nil {
+        log.Panic(err)
+    }
+
+    client, err := smtp.NewClient(conn, smtpServer.host)
+    if err != nil {
+        log.Panic(err)
+    }
+
+    // step 1: Use Auth
+    if err = client.Auth(auth); err != nil {
+        log.Panic(err)
+    }
+
+    // step 2: add all from and to
+    if err = client.Mail(mail.senderId); err != nil {
+        log.Panic(err)
+    }
+    for _, k := range mail.toIds {
+        if err = client.Rcpt(k); err != nil {
+            log.Panic(err)
+        }
+    }
+
+    // Data
+    w, err := client.Data()
+    if err != nil {
+        log.Panic(err)
+    }
+
+    _, err = w.Write([]byte(messageBody))
+    if err != nil {
+        log.Panic(err)
+    }
+
+    err = w.Close()
+    if err != nil {
+        log.Panic(err)
+    }
+
+    client.Quit()
+
+    log.Println("Mail sent successfully")
+
+}
 
 func signupPage(res http.ResponseWriter, req *http.Request) {
     fmt.Println("TESTING signup")
@@ -66,6 +253,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
     if err != nil { // see below comment - remove the below if statement to get code to work
         http.Redirect(res, req, "/login", 301)
+        SendMessagemain();
         return
     }
     //fmt.Println("TESTING"+username)
@@ -76,8 +264,9 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     //    http.Redirect(res, req, "/login", 301)
     //    return
     //}
-    fmt.Println("Hello " + databaseUsername)
-    res.Write([]byte("Hello " + databaseUsername))
+    //fmt.Println("Hello " + databaseUsername)
+    //res.Write([]byte("Hello " + databaseUsername))
+    http.ServeFile(res, req, "homepageAllofUs.html")
 
 }
 
@@ -86,7 +275,7 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh
     if err != nil {
         panic(err.Error())
     }
@@ -108,6 +297,7 @@ func main() {
 }
 
 func settings(res http.ResponseWriter, req *http.Request) {
+    fmt.Println("Testing")
     if req.Method != "POST" {
         http.ServeFile(res, req, "settings.html")
         return
@@ -225,125 +415,3 @@ func locations(res http.ResponseWriter, req *http.Request) {
 
 
 }
-
-/*
-
-package main 
-
-import "database/sql"
-import _ "github.com/go-sql-driver/mysql"
-
-import "golang.org/x/crypto/bcrypt"
-
-import "net/http"
-import "fmt"
-
-// Global sql.DB to access the database by all handlers
-var db *sql.DB 
-var err error
-
-func homePage(res http.ResponseWriter, req *http.Request) {
-    http.ServeFile(res, req, "index.html")
-}
-
-func main() {
-   // Create an sql.DB and check for errors
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2")
-    if err != nil {
-        panic(err.Error())    
-    }
-    fmt.Println("HI 1")
-    // sql.DB should be long lived "defer" closes it once this function ends
-    defer db.Close()
-
-    // Test the connection to the database
-    err = db.Ping()
-    if err != nil {
-        panic(err.Error())
-    }
-    fmt.Println("HI 2")
-
-    http.HandleFunc("/", homePage)
-    http.ListenAndServe(":3306", nil)   
-
-    fmt.Println("HI 3") 
-}
-
-func login(res http.ResponseWriter, req *http.Request) {
-    // If method is GET serve an html login page
-    if req.Method != "POST" {
-        http.ServeFile(res, req, "login.html")
-        return
-    }    
-
-    // Grab the username/password from the submitted post form
-    username := req.FormValue("username")
-    password := req.FormValue("password")
-
-    // Grab from the database 
-    var databaseUsername  string
-    var databasePassword  string
-
-    // Search the database for the username provided
-    // If it exists grab the password for validation
-    err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
-    // If not then redirect to the login page
-    if err != nil {
-        http.Redirect(res, req, "login.html", 301)
-        return
-    }
-    
-    // Validate the password
-    err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
-    // If wrong password redirect to the login
-    if err != nil {
-        http.Redirect(res, req, "login.html", 301)
-        return
-    }
-
-    // If the login succeeded
-    res.Write([]byte("Hello " + databaseUsername))
-}
-
-func singupPage(res http.ResponseWriter, req *http.Request) {
-
-    // Serve signup.html to get requests to /signup
-    if req.Method != "POST" {
-        http.ServeFile(res, req, "signup.html")
-        return
-    }     
-    
-    username := req.FormValue("username")
-    password := req.FormValue("password")
-
-    var user string
-
-    err := db.QueryRow("SELECT Username FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&user)
-
-    switch {
-    // Username is available
-    case err == sql.ErrNoRows:
-        hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-        if err != nil {
-            http.Error(res, "Server error, unable to create your account.", 500)    
-            return
-        } 
-
-        _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(Username, Password) VALUES(?, ?)", username, hashedPassword)
-        if err != nil {
-            http.Error(res, "Server error, unable to create your account.", 500)    
-            return
-        }
-
-        res.Write([]byte("User created!"))
-        return
-    case err != nil: 
-        http.Error(res, "Server error, unable to create your account.", 500)    
-        return
-    default: 
-        http.Redirect(res, req, "/", 301)
-    }
-}
-*/
-
-
