@@ -267,10 +267,10 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
         return
     }
 
-    fmt.Println("TESTING " + databaseUsername)
-    fmt.Println("database password = " + databasePassword + " password =  " + password)
-    fmt.Println("string(pw) = ", string(databasePassword))
-    fmt.Println("byte(pw) = ", []byte(databasePassword))
+    //fmt.Println("TESTING " + databaseUsername)
+    //fmt.Println("database password = " + databasePassword + " password =  " + password)
+    //fmt.Println("string(pw) = ", string(databasePassword))
+    //fmt.Println("byte(pw) = ", []byte(databasePassword))
     err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))  //crypto/bcrypt: hashedSecret too short to be a bcrypted password
     fmt.Println(err)
     if err != nil {
@@ -281,7 +281,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     //fmt.Println("Hello " + databaseUsername)
     //res.Write([]byte("Hello " + databaseUsername))
 
-    SendMessagemain(); //SendMessagemina(databaseUsername);
+    //SendMessagemain(databaseUsername); //SendMessagemina(databaseUsername);
     http.ServeFile(res, req, "homepageAllofUs.html")
 
 }

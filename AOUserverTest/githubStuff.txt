@@ -5,3 +5,13 @@ for adds
 git add ____ files you changed
 git commit -m “what you added”
 git push origin master
+
+
+to delete/untrack files
+git rm nameOfFile
+git push
+
+git status - to check what you have different from the main repository 
+
+for merging
+git pull - then go into file to fix the issue, the file will show you where the issue is 
