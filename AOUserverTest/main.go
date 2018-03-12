@@ -215,7 +215,10 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 
     switch {
     case err == sql.ErrNoRows:
-        hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+        fmt.Println("user = " + username + " password = " + password)
+        hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+        fmt.Println("hashedPassword = " , hashedPassword , " Err = " , err)
+        fmt.Println("string(password) = " , string(hashedPassword))
         if err != nil {
             http.Error(res, "Server error, unable to create your account.", 500)
             return
@@ -227,7 +230,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
             return
         }
         fmt.Println("User created!")
-        res.Write([]byte("User created!")) //not sure if this is working?
+        res.Write([]byte("User created!"))
         return
     case err != nil:
         http.Error(res, "Server error, unable to create your account.", 500)
@@ -253,19 +256,23 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
     if err != nil { // see below comment - remove the below if statement to get code to work
         http.Redirect(res, req, "/login", 301)
-        SendMessagemain();
         return
     }
-    //fmt.Println("TESTING"+username)
-    fmt.Println("TESTING "+databaseUsername)
-    //fmt.Println("TESTING")
-    err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))  //for some reason wont work when both of the if err statements are in
-    //if err != nil {
-    //    http.Redirect(res, req, "/login", 301)
-    //    return
-    //}
+    fmt.Println("TESTING " + databaseUsername)
+    fmt.Println("database password = " + databasePassword + " password =  " + password)
+    fmt.Println("string(pw) = ", string(databasePassword))
+    fmt.Println("byte(pw) = ", []byte(databasePassword))
+    err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))  //crypto/bcrypt: hashedSecret too short to be a bcrypted password
+    fmt.Println(err)
+    if err != nil {
+        http.Redirect(res, req, "/login", 301)
+        return
+    }
+
     //fmt.Println("Hello " + databaseUsername)
     //res.Write([]byte("Hello " + databaseUsername))
+
+    SendMessagemain();
     http.ServeFile(res, req, "homepageAllofUs.html")
 
 }
@@ -275,7 +282,7 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh
     if err != nil {
         panic(err.Error())
     }
