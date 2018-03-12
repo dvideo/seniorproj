@@ -1,7 +1,0 @@
-to get
-git pull origin - to pull 
-
-for adds
-git add ____ files you changed
-git commit -m “what you added”
-git push origin master
