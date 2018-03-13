@@ -17,6 +17,7 @@ import("crypto/tls"
     "net/smtp"
     "strings"
     "github.com/rdegges/go-ipify"
+    "github.com/mssola/user_agent"
     ) 
 
 var db *sql.DB
@@ -115,8 +116,8 @@ func IPfunction() (addr string){
         
 }
 func SendMessagemain(usr string) {
-    fmt.Println(IPfunction())
-    fmt.Println(getMacAddr()) //MAC ADDRESS
+    //fmt.Println(IPfunction())
+    //fmt.Println(getMacAddr()) //MAC ADDRESS
     var databaseUsername string
     var databaseLocation string
     var databaseDevice string
@@ -140,8 +141,8 @@ func SendMessagemain(usr string) {
     mail := Mail{}
     mail.senderId = "allofusnoreply@gmail.com" //defaul allofus email
     mail.toIds = []string{databaseEmail} //users we are sending alerts to email.
-    mail.subject = "New "+issue+" Alert"
-    mail.body = "Dear "+usr+", Your AllOfUs account was just signed in from a new "+issue+". You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasnt you please log in to your account and view your activity in the security section"
+    mail.subject = "Security Alert"
+    mail.body = "Dear "+usr+", \n\nYour AllOfUs account was just signed in from a new "+issue+". You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasn't you please log in to your account and view your activity in the security section\n\nThank you, AllOfUs Team"
 
     messageBody := mail.BuildMessage()
 
@@ -247,9 +248,17 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         http.Redirect(res, req, "/", 301)
     }
 }
+func UserAgentBot(req *http.Request)(string,string,string){
+    ua := user_agent.New(req.UserAgent())    
+    name, version := ua.Browser()         
+    fmt.Printf("%v\n", version) //needs to print 
+    return ua.Platform(), ua.OS(), name 
+}
 
 func loginPage(res http.ResponseWriter, req *http.Request) {
     //fmt.Println("TESTING login")
+    Device, OpSys, UserBrowser := UserAgentBot(req)
+    fmt.Println(Device,OpSys,UserBrowser)
     if req.Method != "POST" {
         http.ServeFile(res, req, "login.html")
         return
@@ -281,7 +290,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     //fmt.Println("Hello " + databaseUsername)
     //res.Write([]byte("Hello " + databaseUsername))
 
-    //SendMessagemain(databaseUsername); //SendMessagemina(databaseUsername);
+    SendMessagemain(databaseUsername); //SendMessagemina(databaseUsername);
     http.ServeFile(res, req, "homepageAllofUs.html")
 
 }
@@ -291,7 +300,7 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh
     if err != nil {
         panic(err.Error())
     }
