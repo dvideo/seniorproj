@@ -1,4 +1,5 @@
 CREATE DATABASE allofusdbmysql2;
+drop table allofusdbmysql2.userTable;
 CREATE TABLE allofusdbmysql2.userTable (
   Userid INT NOT NULL AUTO_INCREMENT,
   fName VARCHAR(45) NULL,
@@ -8,8 +9,13 @@ CREATE TABLE allofusdbmysql2.userTable (
   MaritalStatus VARCHAR(45) NULL,
   DateOfBirth INT NULL,
   Email VARCHAR(45) NULL,
+  Location VARCHAR(45) NULL,
+  Device VARCHAR(45) NULL,
+  IP VARCHAR(45) NULL,
   Privacy VARCHAR(45) NULL,
   TimeAccountCreated INT NULL,
+  OS VARCHAR(45) NULL,
+  Browser VARCHAR(45) NULL,
   PRIMARY KEY (Userid)
   );
 
