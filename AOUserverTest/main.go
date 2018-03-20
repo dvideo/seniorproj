@@ -322,7 +322,6 @@ func main() {
 }
 
 func settings(res http.ResponseWriter, req *http.Request) {
-    fmt.Println("Testing")
     if req.Method != "POST" {
         http.ServeFile(res, req, "settings.html")
         return
@@ -373,16 +372,25 @@ func profile(res http.ResponseWriter, req *http.Request) {
         return
     }
     
-    username := req.FormValue("userName")
     //rating := req.FormValue("stat-info")
-
     
-    err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username)//.Scan(&databaseUsername)
-    fmt.Println()
+    var avgStat float32
+    var fName string
+    var lName string
+    username := req.FormValue("userName")
+    
+    db.QueryRow("SELECT fName, lName FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&fName, &lName)
     if err != nil {
         http.Redirect(res, req, "/login", 301)
         return
     }
+    
+     err := db.QueryRow("SELECT StatAvg FROM allofusdbmysql2.statPost WHERE Username=?", username).Scan(&avgStat)
+        if err != nil {
+            http.Redirect(res, req, "/login", 301)
+            return
+        }
+    
     
     /*err := db.QueryRow("INSERT INTO allofusdbmysql2.stats (PostID, statValue) VALUES (?, ?)", num rating)//.Scan(&databaseUsername)
     fmt.Println()
@@ -395,48 +403,41 @@ func profile(res http.ResponseWriter, req *http.Request) {
 }
 
 func locations(res http.ResponseWriter, req *http.Request) {
+    
+    rows, err := db.Query("SELECT * FROM allofusdbmysql2.userLocation")
+    if err != nil {
+        http.Redirect(res, req, "/locations", 301)
+        return
+    }
+        
+//    var Location string
+    
+    for rows.Next(){
+        var Location string
+        var userID int
+        err = rows.Scan(&userID, &Location)
+        if err != nil {
+            http.Redirect(res, req, "/locations", 301)
+            return
+        }      
+    }
+    
+    
+    
     if req.Method != "POST" {
         http.ServeFile(res, req, "locations.html")
         return
     }
     
-    //if(req.FormValue("deleteLocations")){
-        err := db.QueryRow("DROP TABLE allofusdbmysql2.userLocation")
-        fmt.Println()
-        if err != nil {
-            http.Redirect(res, req, "/login", 301)
-            return
-        }
-    //}
+    if _, err := db.Exec("DROP TABLE allofusdbmysql2.userLocation"); err != nil{
     
-    /*
-    rows, err := db.Query("SELECT * FROM allofusdbmysql2.userLocation")
-    if err != nil {
-        http.Redirect(res, req, "/login", 301)
+    //if err != nil {
+        //http.Redirect(res, req, "/login", 301)
+        fmt.Println("Request failed.")
+        return
+    }else{
+        fmt.Println("Susscessfully Deleted.")
         return
     }
-    
-    
-    var Location string
-    
-    for rows.Next(){
-        err = rows.Scan(&Location)
-        if err != nil {
-            http.Redirect(res, req, "/login", 301)
-            return
-        }      
-    }
-    
-    */
-    var fName string
-    var lName string
-   // username := req.FormValue("userName")
-    
-   db.QueryRow("SELECT fName, lName FROM allofusdbmysql2.UserTable WHERE Username=?", fName, lName)//.Scan(&databaseUsername)
-    if err != nil {
-        http.Redirect(res, req, "/login", 301)
-        return
-    }
-
 
 }
