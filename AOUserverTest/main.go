@@ -307,7 +307,7 @@ func main() {
     defer db.Close()
 
     
-    http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request){
+    /*http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request){
         cookie, err := req.Cookie("cookie1")
         //cookie is not set 
         if err != nil{
@@ -322,7 +322,7 @@ func main() {
         }
         
         http.SetCookie(res, cookie)
-    })
+    })*/
     
 
     err = db.Ping()
