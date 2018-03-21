@@ -306,6 +306,25 @@ func main() {
     }
     defer db.Close()
 
+    
+    http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request){
+        cookie, err := req.Cookie("cookie1")
+        //cookie is not set 
+        if err != nil{
+            //id, _ := uuid.NewV4()
+            cookie = &http.Cookie{
+                Name: "ssession-ID",
+               // Value: id.String(),
+            }
+        }
+        if req.FormValue("username") != ""{
+            cookie.Value = req.FormValue("username")
+        }
+        
+        http.SetCookie(res, cookie)
+    })
+    
+
     err = db.Ping()
     if err != nil {
         panic(err.Error())
