@@ -74,6 +74,7 @@ CREATE TABLE allofusdbmysql2.userPost (
 CREATE TABLE allofusdbmysql2.statPost (
   PostID INT NOT NULL,
   StatAvg INT NULL,
+  NumVotes INT NULL,
   TimeCreated INT NULL,
   PRIMARY KEY (PostID)
   );
