@@ -306,16 +306,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
         http.Redirect(res, req, "/login", 301)
         return
     }
-    var databaselocationkey string
-    databaselocationkey = IPfunction()+ username
-    db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",username,IPfunction(),databaselocationkey)
-    var databasedevicekey string
-    databasedevicekey = username+Device
-    db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
-    //fmt.Println("TESTING " + databaseUsername)
-    //fmt.Println("database password = " + databasePassword + " password =  " + password)
-    //fmt.Println("string(pw) = ", string(databasePassword))
-    //fmt.Println("byte(pw) = ", []byte(databasePassword))
+    
     err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))  //crypto/bcrypt: hashedSecret too short to be a bcrypted password
     fmt.Println(err)
     if err != nil {
@@ -327,6 +318,13 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     //res.Write([]byte("Hello " + databaseUsername))
 
     SendMessagemain(databaseUsername,req); //SendMessagemina(databaseUsername);
+    var databaselocationkey string
+    databaselocationkey = IPfunction()+ username
+    db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",username,IPfunction(),databaselocationkey)
+    var databasedevicekey string
+    databasedevicekey = username+Device
+    db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
+    
     http.ServeFile(res, req, "homepageAllofUs.html")
 
 }
