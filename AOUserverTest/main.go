@@ -115,29 +115,44 @@ func IPfunction() (addr string){
         return geo.City
         
 }
-func SendMessagemain(usr string) {
+func SendMessagemain(usr string, req *http.Request) {
     //fmt.Println(IPfunction())
     //fmt.Println(getMacAddr()) //MAC ADDRESS
+    
     var databaseUsername string
     var databaseLocation string
     var databaseDevice string
     var databaseEmail string
-    var Temp int = 0 
-    var issue string = "Location" //default location if its a new device change
+    var databaselocationkey string
+    var databasedevicekey string
+    var Temp int = 2 
+    var issue string = "Location and Device" //default location if its a new device change
     err := db.QueryRow("SELECT Username, Location, Device,Email FROM allofusdbmysql2.UserTable WHERE Username=?", usr).Scan(&databaseUsername, &databaseLocation, &databaseDevice, &databaseEmail)
     if err != nil {
         fmt.Println("fill", err)
     }
     fmt.Println(databaseLocation)
     fmt.Println(IPfunction())
-    if(databaseLocation==IPfunction()){
-        issue = "Device"
-        Temp=1
+    databaselocationkey= (IPfunction()+usr)
+    Device, OpSys, UserBrowser := UserAgentBot(req)
+    fmt.Println(OpSys,UserBrowser)
+    databasedevicekey= (Device+usr)
+    //db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",usr,IPfunction(),databaselocationkey)// IF NOT EXISTS (SELECT * FROM 
+    if (rowExists("SELECT UserInfoID FROM allofusdbmysql2.userLocation WHERE UserInfoID=?",databaselocationkey)) {
+        Temp=Temp-1
+        issue ="Device"
     }
-    if(databaseDevice!="Computer"){ //temp need to get MAC and STORE MAC in database
-        Temp=1
+        
+    //db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",usr,Device,databasedevicekey)
+    if rowExists("SELECT UserInfoID FROM allofusdbmysql2.userdevice WHERE UserInfoID=?",databasedevicekey) {
+        issue = "Location"
+        Temp=Temp-1
     }
-    if(Temp==1){
+   if (rowExists("SELECT UserInfoID FROM allofusdbmysql2.userdevice WHERE UserInfoID=?",databasedevicekey)&&(rowExists("SELECT UserInfoID FROM allofusdbmysql2.userLocation WHERE UserInfoID=?",databaselocationkey))){
+        issue = "Location and Device "
+        Temp=3
+}
+    if(Temp<=2){
     mail := Mail{}
     mail.senderId = "allofusnoreply@gmail.com" //defaul allofus email
     mail.toIds = []string{databaseEmail} //users we are sending alerts to email.
@@ -254,7 +269,15 @@ func UserAgentBot(req *http.Request)(string,string,string){
     fmt.Printf("%v\n", version) //needs to print 
     return ua.Platform(), ua.OS(), name 
 }
-
+func rowExists(query string, args ...interface{}) bool {
+    var exists bool
+    query = fmt.Sprintf("SELECT exists (%s)", query)
+    err := db.QueryRow(query, args...).Scan(&exists)
+    if err != nil && err != sql.ErrNoRows {
+            fmt.Printf("error checking if row exists '%s' %v", args, err)
+    }
+    return exists
+}
 func loginPage(res http.ResponseWriter, req *http.Request) {
     //fmt.Println("TESTING login")
     Device, OpSys, UserBrowser := UserAgentBot(req)
@@ -275,7 +298,12 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
         http.Redirect(res, req, "/login", 301)
         return
     }
-
+    var databaselocationkey string
+    databaselocationkey = IPfunction()+ username
+    db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",username,IPfunction(),databaselocationkey)
+    var databasedevicekey string
+    databasedevicekey = username+Device
+    db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
     //fmt.Println("TESTING " + databaseUsername)
     //fmt.Println("database password = " + databasePassword + " password =  " + password)
     //fmt.Println("string(pw) = ", string(databasePassword))
@@ -290,7 +318,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     //fmt.Println("Hello " + databaseUsername)
     //res.Write([]byte("Hello " + databaseUsername))
 
-    SendMessagemain(databaseUsername); //SendMessagemina(databaseUsername);
+    SendMessagemain(databaseUsername,req); //SendMessagemina(databaseUsername);
     http.ServeFile(res, req, "homepageAllofUs.html")
 
 }
