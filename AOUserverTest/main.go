@@ -228,7 +228,8 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         http.ServeFile(res, req, "signup.html")
         return
     }
-
+    Device, OpSys, UserBrowser := UserAgentBot(req)
+    fmt.Println(Device,OpSys,UserBrowser)
     username := req.FormValue("username")
     password := req.FormValue("password")
 
@@ -248,7 +249,14 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         }
 
         _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(Username, Password) VALUES(?, ?)", username, hashedPassword)
-        
+
+        var databaselocationkey string
+        databaselocationkey = IPfunction()+ username
+        db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",username,IPfunction(),databaselocationkey)
+        var databasedevicekey string
+        databasedevicekey = username+Device
+        db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
+            
         if err != nil {
             http.Error(res, "S1erver error, unable to create your account.", 500)
             return
