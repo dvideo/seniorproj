@@ -232,7 +232,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     fmt.Println(Device,OpSys,UserBrowser)
     username := req.FormValue("username")
     password := req.FormValue("password")
-
+    question := req.FormValue("email2")
     var user string
 
     err := db.QueryRow("SELECT Username FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&user)
@@ -264,7 +264,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         fmt.Println("User created!")
         res.Write([]byte("User created!"))
         return
-    case err != nil:
+    case err != nil || question!="Yes":
         http.Error(res, "Server error, unable to create your account.", 500)
         return
     default:
