@@ -20,17 +20,18 @@ CREATE TABLE allofusdbmysql2.userTable (
   );
 
 CREATE TABLE allofusdbmysql2.userLocation (
-  Userid INT NOT NULL AUTO_INCREMENT,
-  Location VARCHAR(45) NULL,
+  Username VARCHAR(45) NOT NULL,
+  Location VARCHAR(45) NOT NULL,
+  UserInfoID VARChar(50)NOT NULL,
 
-  PRIMARY KEY (Userid)
+  PRIMARY KEY (UserInfoID)
   );
+CREATE TABLE allofusdbmysql2.userdevice (
+  Username VARCHAR(45) NOT NULL,
+  device VARCHAR(45) NOT NULL,
+  UserInfoID VARChar(50)NOT NULL,
 
-CREATE TABLE allofusdbmysql2.userDevice (
-  Userid INT NOT NULL AUTO_INCREMENT,
-  Device VARCHAR(45) NULL,
-
-  PRIMARY KEY (Userid)
+  PRIMARY KEY (UserInfoID)
   );
 
 CREATE TABLE allofusdbmysql2.userIPAddress (
