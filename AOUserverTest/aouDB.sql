@@ -9,8 +9,6 @@ CREATE TABLE allofusdbmysql2.userTable (
   MaritalStatus VARCHAR(45) NULL,
   DateOfBirth INT NULL,
   Email VARCHAR(45) NULL,
-  Location VARCHAR(45) NULL,
-  Device VARCHAR(45) NULL,
   IP VARCHAR(45) NULL,
   Privacy VARCHAR(45) NULL,
   TimeAccountCreated INT NULL,
@@ -88,17 +86,6 @@ CREATE TABLE allofusdbmysql2.stats (
   PRIMARY KEY (PostID)
   );
   
-  
-INSERT INTO allofusdbmysql2.UserTable (Userid,fName,lName,Username,Password,MaritalStatus,DateOfBirth,Email,Privacy,TimeAccountCreated)
-VALUES (00001,'Joshua', 'Gitter', 'jgitter', 'password', 'Single', 06151996, 'joshuacod4@yahoo.com', 'Private', 1200);
 
-INSERT INTO allofusdbmysql2.userLocation(Userid,Location)
-VAlUES(00001,'NY');
-
-INSERT INTO allofusdbmysql2.userDevice(Userid,Device)
-VAlUES(00001,'Computer');
-
-INSERT INTO allofusdbmysql2.userIPAddress(Userid,IP,OS,Browser)
-VAlUES(00001,'.127.0.0.1', 'Mac', 'Chrome');
 
 select * from allofusdbmysql2.UserTable;
