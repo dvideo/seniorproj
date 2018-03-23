@@ -369,15 +369,14 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-    //http.Handle("/", http.FileServer(http.Dir("/")))
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
+    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("css/"))))
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
     if err != nil {
         panic(err.Error())
     }
     defer db.Close()
 
-    
-    /*http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request){
+        /*http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request){
         cookie, err := req.Cookie("cookie1")
         //cookie is not set 
         if err != nil{
