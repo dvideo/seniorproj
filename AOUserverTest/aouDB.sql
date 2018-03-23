@@ -1,5 +1,4 @@
 CREATE DATABASE allofusdbmysql2;
-drop table allofusdbmysql2.userTable;
 CREATE TABLE allofusdbmysql2.userTable (
   Userid INT NOT NULL AUTO_INCREMENT,
   fName VARCHAR(45) NULL,
