@@ -8,6 +8,7 @@ import "golang.org/x/crypto/bcrypt"
 
 import "net/http"
 import "fmt"
+// import "time"
 import("crypto/tls"
     "encoding/json"
     "io/ioutil"
@@ -230,25 +231,53 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     }
     Device, OpSys, UserBrowser := UserAgentBot(req)
     fmt.Println(Device,OpSys,UserBrowser)
+
+    email := req.FormValue("email")
     username := req.FormValue("username")
+    fName := req.FormValue("firstname")
+    lName := req.FormValue("lastname")
     password := req.FormValue("password")
+    confPass := req.FormValue("confirmpassword")
+    bday := req.FormValue("bday")
     question := req.FormValue("email2")
+
     var user string
+
+    fmt.Println("email = " + email)
+    fmt.Println("un = " + username)
+    fmt.Println("fName = " + fName)
+    fmt.Println("lName = " + lName)
+    fmt.Println("pw = " + password)
+    fmt.Println("confpw = " + confPass)
+    fmt.Println("bday = " + bday)
+
+
+    if password != confPass{
+        http.Error(res, "Error, passwords are not equal, please try again. ", 500)
+        return
+    }
+
+
+    //if time.Now().Year()-18 >= bday{
+
+    //}
+
+
 
     err := db.QueryRow("SELECT Username FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&user)
 
     switch {
     case err == sql.ErrNoRows:
-        fmt.Println("user = " + username + " password = " + password)
+        //fmt.Println("user = " + username + " password = " + password)
         hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-        fmt.Println("hashedPassword = " , hashedPassword , " Err = " , err)
-        fmt.Println("string(password) = " , string(hashedPassword))
+        //fmt.Println("hashedPassword = " , hashedPassword , " Err = " , err)
+        //fmt.Println("string(password) = " , string(hashedPassword))
         if err != nil {
             http.Error(res, "Server3 error, unable to create your account.", 500)
             return
         }
 
-        _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(Username, Password) VALUES(?, ?)", username, hashedPassword)
+        _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(fName,lName,Username, Password, Email, DateOfBirth) VALUES(?,?, ?, ?, ?, ?)", fName, lName,username, hashedPassword,email,bday)
 
         var databaselocationkey string
         databaselocationkey = IPfunction()+ username
@@ -300,6 +329,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
 
     var databaseUsername string
     var databasePassword string
+
     
     err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
     if err != nil { // see below comment - remove the below if statement to get code to work
@@ -334,7 +364,7 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
     if err != nil {
         panic(err.Error())
     }
