@@ -128,12 +128,10 @@ func SendMessagemain(usr string, req *http.Request) {
     var databasedevicekey string
     var Temp int = 2 
     var issue string = "Location and Device" //default location if its a new device change
-    err := db.QueryRow("SELECT Username, Location, Device,Email FROM allofusdbmysql2.UserTable WHERE Username=?", usr).Scan(&databaseUsername, &databaseLocation, &databaseDevice, &databaseEmail)
+    err := db.QueryRow("SELECT Username, Email FROM allofusdbmysql2.UserTable WHERE Username=?", usr).Scan(&databaseUsername, &databaseEmail)
     if err != nil {
         fmt.Println("fill", err)
     }
-    fmt.Println(databaseLocation)
-    fmt.Println(IPfunction())
     databaselocationkey= (IPfunction()+usr)
     Device, OpSys, UserBrowser := UserAgentBot(req)
     fmt.Println(OpSys,UserBrowser)
