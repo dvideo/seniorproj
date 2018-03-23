@@ -1,13 +1,5 @@
-
 package main
 
-import "database/sql"
-import _ "github.com/go-sql-driver/mysql"
-
-import "golang.org/x/crypto/bcrypt"
-
-import "net/http"
-import "fmt"
 // import "time"
 import("crypto/tls"
     "encoding/json"
@@ -19,6 +11,13 @@ import("crypto/tls"
     "strings"
     "github.com/rdegges/go-ipify"
     "github.com/mssola/user_agent"
+
+    "fmt"
+    "net/http"
+    "golang.org/x/crypto/bcrypt"
+    "database/sql"
+    _ "github.com/go-sql-driver/mysql"
+
     ) 
 
 var db *sql.DB
@@ -121,8 +120,6 @@ func SendMessagemain(usr string, req *http.Request) {
     //fmt.Println(getMacAddr()) //MAC ADDRESS
     
     var databaseUsername string
-    var databaseLocation string
-    var databaseDevice string
     var databaseEmail string
     var databaselocationkey string
     var databasedevicekey string
@@ -249,10 +246,20 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     fmt.Println("confpw = " + confPass)
     fmt.Println("bday = " + bday)
 
+    if (!strings.ContainsAny(password, "123456789")) || (!strings.ContainsAny(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) || (len(password)<6){
+        http.Error(res, "Error, passwords must contain a number, a capital letter, and be at least 7 characters long. ", 500)
+        return
+    }
 
     if password != confPass{
         http.Error(res, "Error, passwords are not equal, please try again. ", 500)
         return
+    }
+
+    if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday==""){
+        http.Error(res, "Error, fields can't be blank. ", 500)
+        return
+
     }
 
 
@@ -281,7 +288,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         databaselocationkey = IPfunction()+ username
         db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",username,IPfunction(),databaselocationkey)
         var databasedevicekey string
-        databasedevicekey = username+Device
+        databasedevicekey = Device+username
         db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
             
         if err != nil {
@@ -362,6 +369,7 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+    //http.Handle("/", http.FileServer(http.Dir("/")))
     db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
     if err != nil {
         panic(err.Error())
