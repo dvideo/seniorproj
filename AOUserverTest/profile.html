@@ -46,6 +46,25 @@
 		</style>
 		
 		
+		<style>
+		.photoCarousel {
+			box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+			transition: 0.3s;
+			width: 48%;
+			border-radius: 3px;
+			background-color: #ABB2B9;
+		}
+
+		img {
+			border-radius: 5px 5px 0 0;
+		}
+
+		.container {
+			padding: 1px 1px;
+		}
+		</style>
+		
+		
 		<script src="javascript/jqueryStat.js"></script>
 		<style type="text/css">
 			html, body {
@@ -353,8 +372,8 @@
 				/////////////////////////////////////////////////////
 				// This part should be replaced by database queries.
 				/////////////////////////////////////////////////////
-				averageRating = 5;
-				numVotes = numVotes + 1;
+				averageRating = 5;//{{ .avgStat}};
+				numVotes = 1; //{{ .numVotes}};
 				/////////////////////////////////////////////////////
 				// Display the rating and number of votes in the widget.
 				document.getElementById("rating").innerHTML = averageRating.toFixed(1);
@@ -421,7 +440,6 @@
 				elem.style.background = "linear-gradient(to right, " + startRGB + " 0%," + endRGB + " 100%)"; // W3C
 				elem.style.filter = "progid:DXImageTransform.Microsoft.gradient( startColorstr='" + startRGB + "', endColorstr='" + endRGB + "',GradientType=1 )"; // IE6-9
 			}
-		-->
 		</script>
 		
 		<script>
@@ -440,95 +458,52 @@
 		
 		</script>
 		
-		
-		
-		<style>
-		
-		#myInput {
-			background-position: 10px 12px;
-			background-repeat: no-repeat;
-			font-size: 16px;
-			padding: 12px 20px 12px 40px;
-			border: 1px solid #ddd;
-			margin-bottom: 12px;
-		}
 
-		#myUL {
-			list-style-type: none;
-			padding: 0;
-			margin: 0;
-		}
 
-		#myUL li a {
-			border: 1px solid #ddd;
-			margin-top: -1px; /* Prevent double borders */
-			background-color: #f6f6f6;
-			padding: 12px;
-			text-decoration: none;
-			font-size: 18px;
-			color: black;
-			display: block
-		}
-
-		#myUL li a:hover:not(.header) {
-			background-color: #eee;
-		}
-		</style>    
-		
-		<script>
-		function searchFriend() {
-				var input, ul, li, a, i;
-				input = document.getElementById("myInput").value.toUpperCase();
-				ul = document.getElementById("myUL");
-				li = ul.getElementsByTagName("li");
-				for (i = 0; i < li.length; i++) {
-						a = li[i].getElementsByTagName("a")[0];
-						if (a.innerHTML.toUpperCase().indexOf(input) > -1) {
-								li[i].style.display = "";
-						} else {
-								li[i].style.display = "none";
-						}
-				}
-		}
-		</script>
 		
 		
-
 		<link rel="stylesheet" type="text/css" href="format.css">
 	</head>
 	
 	<body>
 	
 	<!-- T<img src="photo.png" alt="coverArt" style="width:50%"> -->
-	<img src="http://westchesterluxuries.com/email/banneremail.jpg" alt="" border="0" style="width:49%">
+<!-- 	<img src="http://westchesterluxuries.com/email/banneremail.jpg" alt="" border="0" style="width:49%"> -->
+
+
+		<div class="photoCarousel">
+			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
+			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
+			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
+			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
+			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
+			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
+			<br>
+			<button onclick="num.slide(0)">></button>
+			<button onclick="num.slide(1)">Next</button>
+			<button onclick="num.slide(2)">Next</button>
+			<button onclick="num.slide(3)">Next</button>
+		</div>	
+
+
+		<script src="carousel.js"></script>
+		
+		
+		<script>
+			var num = new Carousel();
+		</script>
 	
 		<div class="coverArt">
 			<div class="container">
 			<img src="photo.png" alt="profilePicture" style="width:100%">
 			<h1>Hello {{ .userName}}</h1>
 			<a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a>
-			<a href="/index"><i class="fa fa-power-off"></i> Logout</a>
+			<a href="/logout"><i class="fa fa-power-off"></i> Logout</a>
 			</div>
 		</div>
 		<br>
 		<h3>Recents Posts</h3>
-	<!--	<input type="text" id="myInput" onkeyup="searchFriend()" placeholder="Search for your friends..." style="float:right;">
-		<br>
-		<br>
-		<br>
-		<ul id="myUL" style="float:right;">
-			<li><a href="#">{{ .fName .lName}}</a></li>
-			<li><a href="#">Mike</a></li>
 
-			<li><a href="#">Johnny</a></li>
-			<li><a href="#">Elijah</a></li>
-
-			<li><a href="#">Chris</a></li>
-			<li><a href="#">Sal</a></li>
-		</ul>
-
-		
-		-->
 		
 		
 		<!--   Sends stat# and calculate average every 10 seconds -->
@@ -555,6 +530,8 @@
 		</div>	
 		
 		
-	
+	<footer>
+		<p id="footertext">Copyright 2018</p>
+	</footer>
 	</body>
 </html>
