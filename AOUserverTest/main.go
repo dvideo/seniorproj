@@ -368,22 +368,15 @@ func homePage(res http.ResponseWriter, req *http.Request) {
     http.ServeFile(res, req, "index.html")
 }
 
-func main() {
-    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("css/"))))
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
-    if err != nil {
-        panic(err.Error())
-    }
-    defer db.Close()
-
-        /*http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request){
+func seesionHandling(){
+        http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request){
         cookie, err := req.Cookie("cookie1")
         //cookie is not set 
         if err != nil{
             //id, _ := uuid.NewV4()
             cookie = &http.Cookie{
                 Name: "ssession-ID",
-               // Value: id.String(),
+                // Value: id.String(),
             }
         }
         if req.FormValue("username") != ""{
@@ -391,8 +384,17 @@ func main() {
         }
         
         http.SetCookie(res, cookie)
-    })*/
-    
+    })
+}
+
+
+func main() {
+    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("css/"))))
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
+    if err != nil {
+        panic(err.Error())
+    }
+    defer db.Close()
 
     err = db.Ping()
     if err != nil {
