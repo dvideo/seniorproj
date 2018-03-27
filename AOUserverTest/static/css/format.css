@@ -17,19 +17,19 @@ th {
 body { 
 	background-color:#EBEDEF;
 }
-
+/*
 a:link    {
 	color:darkred
 }	     /* an unvisited link */
-
+/*
 a:visited {
 	color:darkred
 }	     /* a link that has been visited */
-
+/*
 a:active  {
 	color:red
 }		     /* a link now being visited */
-
+/*
 a:hover   {
 	color:red
 }		     /* when the mouse hovers over it */
@@ -89,4 +89,8 @@ footer {
 #homebutton {
 	color: white;
 	float: left;
+}
+
+#links {
+	margin-top: -10px;
 }
