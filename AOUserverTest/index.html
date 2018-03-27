@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>Login</title>
     <link type="text/css" rel="stylesheet" href="/static/css/format.css">
 </head>
 <body>
     <header>
-        <h1 id="title">Home Page</h1>
+        <h1 id="title">Login Page</h1>
     </header>
-    <ol id="homepagelinks">
-        <li><a href=/login id="loginLink">Login</a></li>
-        <li><a href=/signup id="signupLink">Sign Up</a></li>
-    </ol>
-    <img src="friends.jpg" alt="AllOfUs Stock Photo" id="friends">
+    <form method="POST" action="/login">
+        <input type="text" name="username" placeholder="username">
+        <input type="password" name="password" placeholder="password">
+        <input type="submit" value="Submit">
+    </form>
+    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
     <footer>
         <p id="footertext">Copyright 2018</p>
     </footer>
