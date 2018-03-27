@@ -438,7 +438,7 @@ func main() {
     http.ListenAndServe(":8080", nil)
 }
 
-func settings(res http.ResponseWriter, req *http.Request) {
+func slideshow(res http.ResponseWriter, req *http.Request) {
     if req.Method != "POST" {
         http.ServeFile(res, req, "slideshow.html")
         return
