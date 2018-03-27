@@ -29,7 +29,7 @@
             <br class="clear" />
             
             <label for="password">Password: </label> 
-            <input type="password" name="password"> 
+            <input type="password" name="password">*
             <br class="clear" />
             
             <label for="confirmpassword">Confirm Password: </label> 
@@ -38,7 +38,7 @@
             
             <!--This will check the birthdate-->
             <label for="bday">Enter your birthday: </label> 
-            <input type="date" name="bday" max="2000-01-02">*
+            <input type="date" name="bday" max="2000-01-02">+
             <br class="clear" />
             
             <label for="email2">Are you a person?</label> 
@@ -54,7 +54,8 @@
     <br class="clear" />
     <p>Already have an account? <a href="/index">Log In</a> </p>
     
-    <div id="star">*</div><p id="passwordstuff"> must be at least 18 years old</p>
+    <div id="star">*</div><p id="passwordstuff"> passwords must contain a number, a capital letter, and be at least 7 characters long</p>
+    <div id="plus">+</div><p id="birthdaystuff"> must be at least 18 years old</p>
     <footer>
         <p id="footertext">Copyright 2018</p>
     </footer>
