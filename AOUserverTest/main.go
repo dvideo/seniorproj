@@ -22,6 +22,7 @@ import("crypto/tls"
 
 var db *sql.DB
 var err error
+var sessionUser string
 var templ *template.Template
 type GeoIP struct {
         // The right side is the name of the JSON variable
@@ -330,6 +331,9 @@ func rowExists(query string, args ...interface{}) bool {
 }
 func loginPage(res http.ResponseWriter, req *http.Request) {
     //fmt.Println("TESTING login")
+    seesionHandling()
+    session, _ := store.Get(req, "secretKey")
+    
     Device, OpSys, UserBrowser := UserAgentBot(req)
     fmt.Println(Device,OpSys,UserBrowser)
     if req.Method != "POST" {
@@ -368,12 +372,25 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     databasedevicekey = Device+username
     db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
     
+    sessionUser = username
+    session.Values["authenticated"] = true
+    session.Save(req, res)
+    
+    
     http.ServeFile(res, req, "homepageAllofUs.html")
 
 }
 
 func homePage(res http.ResponseWriter, req *http.Request) {
     http.ServeFile(res, req, "index.html")
+}
+
+func logout(res http.ResponseWriter, req *http.Request) {
+    http.ServeFile(res, req, "logout.html")
+    session, _ := store.Get(req, "secretKey")
+    
+    session.Values["authenticated"] = false
+    session.Save(req, res)
 }
 
 func seesionHandling(){
