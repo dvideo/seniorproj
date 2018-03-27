@@ -2,6 +2,9 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/format.css">
 <style>
 * {box-sizing: border-box;}
 body {font-family: Verdana, sans-serif;}
@@ -75,6 +78,20 @@ img {vertical-align: middle;}
 </style>
 </head>
 <body>
+
+<header>
+  <h1 id="title">All of Us</h1>
+</header>
+
+<ul id="links">
+  <li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
+  <li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
+  <li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
+  <li><a href="/templates/locations"> Locations</a></li>
+  <li><a href="/slideshow"> Slideshow</a></li>
+  <li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
+</ul>
+
  <audio controls>
   <source src="song.mp3" type="audio/mpeg">
 Your browser does not support the audio element.
@@ -132,5 +149,8 @@ function showSlides() {
 }
 </script>
 
+<footer>
+  <p id="footertext">Copyright 2018</p>
+</footer>
 </body>
 </html> 
