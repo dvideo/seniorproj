@@ -6,7 +6,7 @@
 		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
-		<link type="text/css" rel="stylesheet" href="format.css">
+		<link rel="stylesheet" href="static/css/format.css">
 		<meta name="description" content="Layout of the users date in one location">
 		<style>
 		.coverArt {
@@ -466,7 +466,16 @@
 	</head>
 	
 	<body>
-	
+	<header>
+		<h1 id="title">All of Us</h1>
+	</header>
+	<ul id="links">
+		<li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
+		<li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
+		<li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
+		<li><a href="/templates/locations"> Locations</a></li>
+		<li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
+	</ul>
 	<!-- T<img src="photo.png" alt="coverArt" style="width:50%"> -->
 <!-- 	<img src="http://westchesterluxuries.com/email/banneremail.jpg" alt="" border="0" style="width:49%"> -->
 
@@ -497,8 +506,8 @@
 			<div class="container">
 			<img src="photo.png" alt="profilePicture" style="width:100%">
 			<h1>Hello {{ .userName}}</h1>
-			<a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a>
-			<a href="/logout"><i class="fa fa-power-off"></i> Logout</a>
+			<!--<a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a>
+			<a href="/logout"><i class="fa fa-power-off"></i> Logout</a>-->
 			</div>
 		</div>
 		<br>
