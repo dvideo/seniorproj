@@ -251,6 +251,13 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     fmt.Println("confpw = " + confPass)
     fmt.Println("bday = " + bday)
 
+
+    if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday==""){
+        http.Error(res, "Error, fields can't be blank. ", 500)
+        return
+
+    }
+
     if (!strings.ContainsAny(password, "123456789")) || (!strings.ContainsAny(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) || (len(password)<6){
         http.Error(res, "Error, passwords must contain a number, a capital letter, and be at least 7 characters long. ", 500)
         return
@@ -261,11 +268,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         return
     }
 
-    if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday==""){
-        http.Error(res, "Error, fields can't be blank. ", 500)
-        return
 
-    }
 
 
     //if time.Now().Year()-18 >= bday{
@@ -396,7 +399,7 @@ func seesionHandling(){
 func main() {
     templ, err = templ.ParseGlob("templates/*.html")
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
     if err != nil {
         panic(err.Error())
     }
