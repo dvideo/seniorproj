@@ -365,7 +365,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     databaselocationkey = IPfunction()+ username
     db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",username,IPfunction(),databaselocationkey)
     var databasedevicekey string
-    databasedevicekey = username+Device
+    databasedevicekey = Device+username
     db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
     
     http.ServeFile(res, req, "homepageAllofUs.html")
@@ -399,7 +399,7 @@ func seesionHandling(){
 func main() {
     templ, err = templ.ParseGlob("templates/*.html")
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
     if err != nil {
         panic(err.Error())
     }
@@ -502,8 +502,8 @@ func profile(res http.ResponseWriter, req *http.Request) {
 }
 func loadlocationstable(res http.ResponseWriter, req *http.Request){
     var un string
-    un = "Danburyjohnnybeltran"
-    rows, err := db.Query("SELECT username,location FROM allofusdbmysql2.userLocation Where UserInfoID =?",un)//was supposed to query specific columns tho
+    un = "%johnnybeltran"
+    rows, err := db.Query("SELECT username,location FROM allofusdbmysql2.userLocation Where UserInfoID LIKE ?",un)//was supposed to query specific columns tho
     if err != nil {
     log.Println(err)
     http.Error(res, "there was an error", http.StatusInternalServerError)
