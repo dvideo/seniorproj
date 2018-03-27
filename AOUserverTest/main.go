@@ -337,7 +337,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     Device, OpSys, UserBrowser := UserAgentBot(req)
     fmt.Println(Device,OpSys,UserBrowser)
     if req.Method != "POST" {
-        http.ServeFile(res, req, "login.html")
+        http.ServeFile(res, req, "index.html")
         return
     }
 
@@ -382,11 +382,12 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
 }
 
 func homePage(res http.ResponseWriter, req *http.Request) {
-    http.ServeFile(res, req, "index.html")
+    http.ServeFile(res, req, "homepageAllofUs.html")
 }
 
 func logout(res http.ResponseWriter, req *http.Request) {
-    http.ServeFile(res, req, "logout.html")
+    http.ServeFile(res, req, "index.html")
+    //http.ServeFile(res, req, "logout.html")
    // session, _ := store.Get(req, "secretKey")
     
    // session.Values["authenticated"] = false
@@ -430,7 +431,7 @@ func main() {
     http.HandleFunc("/signup", signupPage)
     //fmt.Println("TESTING")
     http.HandleFunc("/login", loginPage)
-    http.HandleFunc("/", homePage)
+    http.HandleFunc("/", loginPage)
     http.HandleFunc("/settings", settings)
     http.HandleFunc("/slideshow", slideshow)
     http.HandleFunc("/locations", locations)
@@ -556,7 +557,6 @@ func loadlocationstable(res http.ResponseWriter, req *http.Request){
 
 }
 func locations(res http.ResponseWriter, req *http.Request) {
-    
     var un string
     un = "Danburyjohnnybeltran"
     loadlocationstable(res,req)
