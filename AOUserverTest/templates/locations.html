@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, td {
+    border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+<div class="posting">
+			<div class="container">
+			<table id="myTable" width="50%">
+				<!-- Table header -->
+                    <thead>
+                    <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                    </thead>
+                    <!-- Table footer -->
+                    <tfoot>
+                    <tr>
+                        <td>END</td>
+                    </tr>
+                    </tfoot>
+                    <!-- Table body -->
+                    <tbody>
+                    {{ range . }}
+                    <tr>
+  						<td>{{ .Username }}</td>
+                        <td>{{ .Loc }}</td>
+                        <form action="/locations" method="post">
+ 					 <td><input type="submit" value="Delete" onclick="deleteRow(this)"></td>
+					</tr>
+                    {{ end }}
+                    </tbody>
+				
+			
+			</table>
+			</div>
+		</div>
+		
+		
+		<br>
+		
+		<div class="posting">
+			<div class="container">
+				 
+				<form action="/locations" method="post">
+						<input type="submit" value="Delete Locations" onclick="alert('Deleted All Locations');window.location.reload()"></input>
+				</form>
+				
+			</div>
+		</div>
+<script>
+function deleteRow(r) {
+    var i = r.parentNode.parentNode.rowIndex;
+    document.getElementById("myTable").deleteRow(i);
+}
+</script>
+
+</body>
+</html>

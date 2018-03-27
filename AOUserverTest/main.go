@@ -11,7 +11,7 @@ import("crypto/tls"
     "strings"
     "github.com/rdegges/go-ipify"
     "github.com/mssola/user_agent"
-
+    "html/template"
     "fmt"
     "net/http"
     "golang.org/x/crypto/bcrypt"
@@ -22,6 +22,7 @@ import("crypto/tls"
 
 var db *sql.DB
 var err error
+var templ *template.Template
 type GeoIP struct {
         // The right side is the name of the JSON variable
     Ip          string  `json:"ip"`
@@ -36,7 +37,10 @@ type GeoIP struct {
     MetroCode   int     `json:"metro_code"`
     AreaCode    int     `json:"area_code"`
 }
-
+type devLoc struct {
+    Username string
+    Loc string
+}
 
 type Mail struct {
     senderId string
@@ -148,6 +152,7 @@ func SendMessagemain(usr string, req *http.Request) {
         issue = "Location and Device "
         Temp=3
 }
+    fmt.Println(issue)
     if(Temp<=2){
     mail := Mail{}
     mail.senderId = "allofusnoreply@gmail.com" //defaul allofus email
@@ -492,36 +497,48 @@ func profile(res http.ResponseWriter, req *http.Request) {
     num+1*/
 
 }
+func loadlocationstable(res http.ResponseWriter, req *http.Request){
+    var un string
+    un = "Danburyjohnnybeltran"
+    rows, err := db.Query("SELECT username,location FROM allofusdbmysql2.userLocation Where UserInfoID =?",un)//was supposed to query specific columns tho
+    if err != nil {
+    log.Println(err)
+    http.Error(res, "there was an error", http.StatusInternalServerError)
+    return
+    }
+    var username string
+    var loc string
+    /*if req.Method != "POST" {
+        }*/
+    var ps []devLoc
+    //loop through the db
+    for rows.Next() {
+    err = rows.Scan( &username, &loc)
+    fmt.Println("here4.5 ", username,loc)
+    if err != nil {
+        log.Println(err)
+        http.Error(res, "there was an error", http.StatusInternalServerError)
+        return
+    }
+    //fmt.Print(append(ps, devLoc{ Username: username, Loc: loc, Dev: dev}))
+    ps = append(ps, devLoc{ Username: username, Loc: loc})
+    }
+    fmt.Print(templ.ExecuteTemplate(res, "locations.html", ps))
+    
 
+}
 func locations(res http.ResponseWriter, req *http.Request) {
     
-    rows, err := db.Query("SELECT * FROM allofusdbmysql2.userLocation")
-    if err != nil {
-        http.Redirect(res, req, "/locations", 301)
-        return
-    }
-        
-//    var Location string
-    
-    for rows.Next(){
-        var Location string
-        var userID int
-        err = rows.Scan(&userID, &Location)
-        if err != nil {
-            http.Redirect(res, req, "/locations", 301)
-            return
-        }      
-    }
-    
-    
-    
+    var un string
+    un = "Danburyjohnnybeltran"
+    loadlocationstable(res,req)
     if req.Method != "POST" {
-        http.ServeFile(res, req, "locations.html")
+        //http.ServeFile(res, req, "locations.html")
         return
     }
     
-    if _, err := db.Exec("DROP TABLE allofusdbmysql2.userLocation"); err != nil{
-    
+    if _, err := db.Exec("DELETE FROM allofusdbmysql2.userLocation WHERE UserInfoID =?",un)
+         err != nil{
     //if err != nil {
         //http.Redirect(res, req, "/login", 301)
         fmt.Println("Request failed.")
