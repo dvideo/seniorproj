@@ -416,7 +416,7 @@ func seesionHandling(){
 func main() {
     templ, err = templ.ParseGlob("templates/*.html")
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
     if err != nil {
         panic(err.Error())
     }
@@ -431,10 +431,18 @@ func main() {
     //fmt.Println("TESTING")
     http.HandleFunc("/login", loginPage)
     http.HandleFunc("/", homePage)
-     http.HandleFunc("/settings", settings)
+    http.HandleFunc("/settings", settings)
+    http.HandleFunc("/slideshow", slideshow)
     http.HandleFunc("/locations", locations)
     http.HandleFunc("/profile", profile)
     http.ListenAndServe(":8080", nil)
+}
+
+func settings(res http.ResponseWriter, req *http.Request) {
+    if req.Method != "POST" {
+        http.ServeFile(res, req, "slideshow.html")
+        return
+    }
 }
 
 func settings(res http.ResponseWriter, req *http.Request) {
