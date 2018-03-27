@@ -85,6 +85,8 @@ CREATE TABLE allofusdbmysql2.stats (
   PRIMARY KEY (PostID)
   );
   
-
+INSERT INTO allofusdbmysql2.userLocation values ('Jbeltran95','New York','Danburyjohnnybeltran');
+INSERT INTO allofusdbmysql2.userLocation values ('Jbeltran95','New York','Danburyjohnnybeltran2');
+INSERT INTO allofusdbmysql2.userLocation values ('Jbeltran95','New York','Danburyjohnnybeltran3');
 
 select * from allofusdbmysql2.UserTable;
