@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
 		<link rel="stylesheet" href="/static/css/format.css">
 		<meta name="description" content="Layout of the users date in one location">
-		<style>
+				<style>
 		.coverArt {
 			box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 			transition: 0.3s;
@@ -53,6 +53,7 @@
 			width: 48%;
 			border-radius: 3px;
 			background-color: #ABB2B9;
+			float: left;
 		}
 
 		img {
@@ -458,10 +459,159 @@
 		
 		</script>
 		
+		
+		<!-- 		Photo carousel  -->
+				<style>
+
+				.container {
+					width: 960px;
+					height: 140px;
+					position: relative;
+				}
 
 
-		
-		
+				#carousel {
+					width: 100%;
+					height: 100%;
+					position: absolute;
+					-webkit-transform-style: preserve-3d;
+						 -moz-transform-style: preserve-3d;
+							 -o-transform-style: preserve-3d;
+									transform-style: preserve-3d;
+				}
+
+				.ready #carousel {
+					-webkit-transition: -webkit-transform 1s;
+						 -moz-transition: -moz-transform 1s;
+							 -o-transition: -o-transform 1s;
+									transition: transform 1s;
+				}
+
+				#carousel.panels-backface-invisible figure {
+					-webkit-backface-visibility: hidden;
+						 -moz-backface-visibility: hidden;
+							 -o-backface-visibility: hidden;
+									backface-visibility: hidden;
+				}
+
+				#carousel figure {
+					display: block;
+					position: absolute;
+					width:70%;
+					height: 116px;
+					left: 10px;
+					top: 10px;
+					border: 2px solid black;
+					line-height: 116px;
+					font-size: 80px;
+					font-weight: bold;
+					color: white;
+					text-align: center;
+				}
+
+			</style>
+			
+			<script src="carousel.js"></script>
+				
+
+				<script>
+					var transformProp = Modernizr.prefixed('transform');
+
+					function Carousel3D ( el ) {
+						this.element = el;
+						this.rotation = 0;
+						this.panelCount = 0;
+						this.totalPanelCount = this.element.children.length;
+						this.theta = 0;
+
+						this.isHorizontal = false;
+
+					}
+				
+				
+					Carousel3D.prototype.modify = function() {
+
+						var panel, angle, i;
+
+						this.panelSize = this.element[ this.isHorizontal ? 'offsetWidth' : 'offsetHeight' ];
+						this.rotateFn = this.isHorizontal ? 'rotateY' : 'rotateX';
+						this.theta = 360 / this.panelCount;
+
+						// do some trig to figure out how big the carousel
+						// is in 3D space
+						this.radius = Math.round( ( this.panelSize / 2) / Math.tan( Math.PI / this.panelCount ) );
+
+						for ( i = 0; i < this.panelCount; i++ ) {
+							panel = this.element.children[i];
+							angle = this.theta * i;
+							panel.style.opacity = 1;
+							panel.style.backgroundColor = 'hsla(' + angle + ', 100%, 50%, 0.8)';
+							// rotate panel, then push it out in 3D space
+							panel.style[ transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
+						}
+
+						// adjust rotation so panels are always flat
+						this.rotation = Math.round( this.rotation / this.theta ) * this.theta;
+
+						this.transform();
+
+					};
+
+					Carousel3D.prototype.transform = function() {
+						// push the carousel back in 3D space,
+						// and rotate it
+						this.element.style[ transformProp ] = 'translateZ(-' + this.radius + 'px) ' + this.rotateFn + '(' + this.rotation + 'deg)';
+					};
+
+
+
+					var init = function() {
+
+
+						var carousel = new Carousel3D( document.getElementById('carousel') ),
+								panelCountInput = document.getElementById('panel-count'),
+								axisButton = document.getElementById('toggle-axis'),
+								navButtons = document.querySelectorAll('#navigation button'),
+
+								onNavButtonClick = function( event ){
+									var increment = parseInt( event.target.getAttribute('data-increment') );
+									carousel.rotation += carousel.theta * increment * -1;
+									carousel.transform();
+								};
+
+						// populate on startup
+						carousel.panelCount = parseInt( 6, 10);
+						carousel.modify();
+
+
+						axisButton.addEventListener( 'click', function(){
+							carousel.isHorizontal = !carousel.isHorizontal;
+							carousel.modify();
+						}, false);
+
+						panelCountInput.addEventListener( 'change', function( event ) {
+							carousel.panelCount = event.target.value;
+							carousel.modify();
+						}, false);
+
+						for (var i=0; i < 2; i++) {
+							navButtons[i].addEventListener( 'click', onNavButtonClick, false);
+						}
+
+						document.getElementById('toggle-backface-visibility').addEventListener( 'click', function(){
+							carousel.element.toggleClassName('panels-backface-invisible');
+						}, false);
+
+						setTimeout( function(){
+							document.body.addClassName('ready');
+						}, 0);
+
+					};
+				
+
+					window.addEventListener( 'DOMContentLoaded', init, false);
+				</script>
+
 		<link rel="stylesheet" type="text/css" href="format.css">
 	</head>
 	
@@ -479,45 +629,62 @@
 	</ul>
 	<!-- T<img src="photo.png" alt="coverArt" style="width:50%"> -->
 <!-- 	<img src="http://westchesterluxuries.com/email/banneremail.jpg" alt="" border="0" style="width:49%"> -->
-
-
-		<div class="photoCarousel">
-			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
-			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
-			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
-			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
-			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
-			<span class="carousel"><img src="photo.png" alt="profilePicture" style="width:100%"></span>
+		
+			<div class="photoCarousel">
 			<br>
-			<button onclick="num.slide(0)">></button>
-			<button onclick="num.slide(1)">Next</button>
-			<button onclick="num.slide(2)">Next</button>
-			<button onclick="num.slide(3)">Next</button>
-		</div>	
-
-
-		<script src="carousel.js"></script>
+			<br>
+			<br>
+			<br>
+				<section class="container">
+					<div id="carousel">
+						<figure><img src="http://westchesterluxuries.com/email/banneremail.jpg"></figure>
+						<figure>Photo 2</figure>
+						<figure>Photo 3</figure>
+						<figure>Photo 4</figure>
+						<figure>Photo 5</figure>
+						<figure>Photo 6</figure>
+						 
+					</div>
+				</section>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+		<p id="navigation">
+			<button id="previous" data-increment="-1">Previous</button>
+			<button id="next" data-increment="1">Next Photo</button>
+		</p>
+		</div>
 		
 		
-		<script>
-			var num = new Carousel();
-		</script>
-	
+		<section id="options">
+			<p>
+				<input id="panel-count" value="120" min="1" max="6" hidden>
+		 </p>
+		<br>
+		<br>
+		<br>
+				<button id="toggle-axis" hidden>Toggle Carousel Axis</button>
+				<button id="toggle-backface-visibility" hidden>Toggle Backface Visibility</button>
+
+		</section>
+		
 		<div class="coverArt">
 			<div class="container">
 			<img src="photo.png" alt="profilePicture" style="width:100%">
 			<h1>Hello {{ .userName}}</h1>
-			<!--<a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a>
-			<a href="/logout"><i class="fa fa-power-off"></i> Logout</a>-->
+			<a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a>
+			<a href="/logout"><i class="fa fa-power-off"></i> Logout</a>
 			</div>
 		</div>
-		<br>
+		
+		
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		<h3>Recents Posts</h3>
 
-		
-		
 		<!--   Sends stat# and calculate average every 10 seconds -->
-			<button onclick="sendStatAvg()">Try it</button>
+		<button onclick="sendStatAvg()">Try it</button>
 
 		<div class="posting">
 				<img src="photo.png" alt="posted Photo or Status" style="width:100%">
@@ -538,7 +705,6 @@
 				<div id="commentB">
 				</div>
 		</div>	
-		
 		
 	<footer>
 		<p id="footertext">Copyright 2018</p>
