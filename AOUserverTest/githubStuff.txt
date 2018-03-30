@@ -1,11 +1,10 @@
 to get
-git pull origin - to pull 
+git pull - to pull 
 
 for adds
 git add ____ files you changed
-git commit -m “what you added”
-git push origin master
-
+git commit -m “comment about what you added/changed”
+git push 
 
 to delete/untrack files
 git rm nameOfFile
