@@ -243,6 +243,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     question := req.FormValue("email2")
 
     var user string
+    //var userEmail string 
 
     fmt.Println("email = " + email)
     fmt.Println("un = " + username)
@@ -252,8 +253,17 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     fmt.Println("confpw = " + confPass)
     fmt.Println("bday = " + bday)
 
+    if (rowExists("SELECT Email FROM allofusdbmysql2.UserTable WHERE Username=?",username)) {
+        http.Error(res, "Username already exists. ", 500)
+        return
+    }
 
-    if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday==""){
+    if (rowExists("SELECT Username FROM allofusdbmysql2.UserTable WHERE Email=?",email)) {
+        http.Error(res, "Email already exists. ", 500)
+        return
+    }
+
+    if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday=="") || (question==""){
         http.Error(res, "Error, fields can't be blank. ", 500)
         return
 
