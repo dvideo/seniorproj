@@ -295,7 +295,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         }
 
         _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(fName,lName,Username, Password, Email, DateOfBirth) VALUES(?,?, ?, ?, ?, ?)", fName, lName,username, hashedPassword,email,bday)
-        db.QueryRow("INSERT INTO allofusdbmysql2.userlocationdevices values(?,?,?,'now()',?",username,IPfunction(),Device,(IPfunction()+Device+username))
+        db.Query("INSERT INTO allofusdbmysql2.userlocationdevices values(?,?,?,now(),?)",username,IPfunction(),Device,(IPfunction()+Device+username))
         
             
         if err != nil {
