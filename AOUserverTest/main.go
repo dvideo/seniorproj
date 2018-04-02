@@ -4,9 +4,8 @@ package main
 import("crypto/tls"
     "encoding/json"
     "io/ioutil"
-    "net"
-    "bytes"
     "log"
+    "time"
     "net/smtp"
     "strings"
     "github.com/rdegges/go-ipify"
@@ -38,9 +37,28 @@ type GeoIP struct {
     MetroCode   int     `json:"metro_code"`
     AreaCode    int     `json:"area_code"`
 }
+type Cookie struct {
+        Name       string
+        Value      string
+        Path       string
+        Domain     string
+        Expires    time.Time
+        RawExpires string
+
+    // MaxAge=0 means no 'Max-Age' attribute specified.
+    // MaxAge<0 means delete cookie now, equivalently 'Max-Age: 0'
+    // MaxAge>0 means Max-Age attribute present and given in seconds
+        MaxAge   int
+        Secure   bool
+        HttpOnly bool
+        Raw      string
+        Unparsed []string // Raw text of unparsed attribute-value pairs
+    }
+    
 type devLoc struct {
-    Username string
     Loc string
+    Device string
+    Date string
 }
 
 type Mail struct {
@@ -76,19 +94,6 @@ func (mail *Mail) BuildMessage() string {
     message += "\r\n" + mail.body
 
     return message
-}
-func getMacAddr() (addr string) {
-    interfaces, err := net.Interfaces()
-    if err == nil {
-        for _, i := range interfaces {
-            if i.Flags&net.FlagUp != 0 && bytes.Compare(i.HardwareAddr, nil) != 0 {
-                // Don't use random as we have a real address
-                addr = i.HardwareAddr.String()
-                break
-            }
-        }
-    }
-    return
 }
 func IPfunction() (addr string){
     ip, err := ipify.GetIp()
@@ -126,40 +131,28 @@ func SendMessagemain(usr string, req *http.Request) {
     
     var databaseUsername string
     var databaseEmail string
-    var databaselocationkey string
-    var databasedevicekey string
     var Temp int = 2 
     var issue string = "Location and Device" //default location if its a new device change
     err := db.QueryRow("SELECT Username, Email FROM allofusdbmysql2.UserTable WHERE Username=?", usr).Scan(&databaseUsername, &databaseEmail)
     if err != nil {
         fmt.Println("fill", err)
     }
-    databaselocationkey= (IPfunction()+usr)
     Device, OpSys, UserBrowser := UserAgentBot(req)
     fmt.Println(OpSys,UserBrowser)
-    databasedevicekey= (Device+usr)
+    var key string
+    key = IPfunction()+Device+usr
     //db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",usr,IPfunction(),databaselocationkey)// IF NOT EXISTS (SELECT * FROM 
-    if (rowExists("SELECT UserInfoID FROM allofusdbmysql2.userLocation WHERE UserInfoID=?",databaselocationkey)) {
-        Temp=Temp-1
-        issue ="Device"
+    if(rowExists("SELECT UserInfoID From allofusdbmysql2.userlocationdevices where UserInfoID=?",key)){
+        Temp=3;
     }
-        
-    //db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",usr,Device,databasedevicekey)
-    if rowExists("SELECT UserInfoID FROM allofusdbmysql2.userdevice WHERE UserInfoID=?",databasedevicekey) {
-        issue = "Location"
-        Temp=Temp-1
-    }
-   if (rowExists("SELECT UserInfoID FROM allofusdbmysql2.userdevice WHERE UserInfoID=?",databasedevicekey)&&(rowExists("SELECT UserInfoID FROM allofusdbmysql2.userLocation WHERE UserInfoID=?",databaselocationkey))){
-        issue = "Location and Device "
-        Temp=3
-}
+     
     fmt.Println(issue)
     if(Temp<=2){
     mail := Mail{}
     mail.senderId = "allofusnoreply@gmail.com" //defaul allofus email
     mail.toIds = []string{databaseEmail} //users we are sending alerts to email.
     mail.subject = "Security Alert"
-    mail.body = "Dear "+usr+", \n\nYour AllOfUs account was just signed in from a new "+issue+". You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasn't you please log in to your account and view your activity in the security section\n\nThank you, AllOfUs Team"
+    mail.body = "Dear "+usr+", \n\nYour AllOfUs account was just signed in from an unknown source. You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasn't you please log in to your account and view your activity in the security section\n\nThank you, AllOfUs Team"
 
     messageBody := mail.BuildMessage()
 
@@ -302,13 +295,8 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         }
 
         _, err = db.Exec("INSERT INTO allofusdbmysql2.UserTable(fName,lName,Username, Password, Email, DateOfBirth) VALUES(?,?, ?, ?, ?, ?)", fName, lName,username, hashedPassword,email,bday)
-
-        var databaselocationkey string
-        databaselocationkey = IPfunction()+ username
-        db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",username,IPfunction(),databaselocationkey)
-        var databasedevicekey string
-        databasedevicekey = Device+username
-        db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
+        db.QueryRow("INSERT INTO allofusdbmysql2.userlocationdevices values(?,?,?,'now()',?",username,IPfunction(),Device,(IPfunction()+Device+username))
+        
             
         if err != nil {
             http.Error(res, "S1erver error, unable to create your account.", 500)
@@ -375,14 +363,9 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     //res.Write([]byte("Hello " + databaseUsername))
 
     SendMessagemain(databaseUsername,req); //SendMessagemina(databaseUsername);
-    var databaselocationkey string
-    databaselocationkey = IPfunction()+ username
-    db.QueryRow("INSERT INTO allofusdbmysql2.userLocation values (?, ?,?)",username,IPfunction(),databaselocationkey)
-    var databasedevicekey string
-    databasedevicekey = Device+username
-    db.QueryRow("INSERT INTO allofusdbmysql2.userdevice values (?, ?,?)",username,Device,databasedevicekey)
-    
-    //sessionUser = username
+     seesionHandling(res,req,username)
+    db.QueryRow("INSERT INTO allofusdbmysql2.userlocationdevices values(?,?,?,now(),?)",username,IPfunction(),Device,(IPfunction()+Device+username))
+        //sessionUser = username
     //session.Values["authenticated"] = true
     //session.Save(req, res)
     
@@ -404,30 +387,19 @@ func logout(res http.ResponseWriter, req *http.Request) {
    // session.Save(req, res)
 }
 
-func seesionHandling(){
-        http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request){
-        cookie, err := req.Cookie("cookie1")
-        //cookie is not set 
-        if err != nil{
-            //id, _ := uuid.NewV4()
-            cookie = &http.Cookie{
-                Name: "ssession-ID",
-                // Value: id.String(),
-            }
-        }
-        if req.FormValue("username") != ""{
-            cookie.Value = req.FormValue("username")
-        }
-        
-        http.SetCookie(res, cookie)
-    })
+func seesionHandling(w http.ResponseWriter, r *http.Request,username string){
+    expiration := time.Now().Add(365 * 24 * time.Hour)
+    cookie := http.Cookie{Name: "username", Value: username, Expires: expiration}
+    http.SetCookie(w, &cookie)
+    r.Cookie("username")
+    fmt.Println(cookie) //should print our the username
 }
 
 
 func main() {
     templ, err = templ.ParseGlob("templates/*.html")
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
     if err != nil {
         panic(err.Error())
     }
@@ -538,48 +510,66 @@ func profile(res http.ResponseWriter, req *http.Request) {
 }
 func loadlocationstable(res http.ResponseWriter, req *http.Request){
     var un string
-    un = "%johnnybeltran"
-    rows, err := db.Query("SELECT username,location FROM allofusdbmysql2.userLocation Where UserInfoID LIKE ?",un)//was supposed to query specific columns tho
+    cookie, _ := req.Cookie("username")  
+    un = "%"+cookie.Value
+    //rows, err := db.Query("SELECT username,location FROM allofusdbmysql2.userLocation Where UserInfoID LIKE ?",un)//was supposed to query specific columns tho
+    rows, err := db.Query("Select location,device,CreatedDate FROM allofusdbmysql2.userlocationdevices Where UserInfoID LIKE ?",un)
     if err != nil {
     log.Println(err)
     http.Error(res, "there was an error", http.StatusInternalServerError)
     return
     }
-    var username string
+    var device string
     var loc string
+    var date string
     /*if req.Method != "POST" {
         }*/
     var ps []devLoc
     //loop through the db
     for rows.Next() {
-    err = rows.Scan( &username, &loc)
-    fmt.Println("here4.5 ", username,loc)
+    err = rows.Scan( &loc, &device, &date)
     if err != nil {
         log.Println(err)
         http.Error(res, "there was an error", http.StatusInternalServerError)
         return
     }
     //fmt.Print(append(ps, devLoc{ Username: username, Loc: loc, Dev: dev}))
-    ps = append(ps, devLoc{ Username: username, Loc: loc})
+    ps = append(ps, devLoc{ Loc: loc, Device: device, Date: date})
     }
     fmt.Print(templ.ExecuteTemplate(res, "locations.html", ps))
     
-
 }
 func locations(res http.ResponseWriter, req *http.Request) {
-    var un string
-    un = "Danburyjohnnybeltran"
+    var temploc string
+    var tempdev string
     loadlocationstable(res,req)
     if req.Method != "POST" {
         //http.ServeFile(res, req, "locations.html")
         return
     }
-    
-    if _, err := db.Exec("DELETE FROM allofusdbmysql2.userLocation WHERE UserInfoID =?",un)
+    var cookie,err = req.Cookie("location")
+        if err == nil {
+            var cookievalue = cookie.Value
+            fmt.Println(cookievalue)
+        }
+    temploc = cookie.Value
+    cookie, err = req.Cookie("device")
+        if err == nil {
+            var cookievalue = cookie.Value
+            fmt.Println(cookievalue)
+        }
+   tempdev = cookie.Value
+    cookie, err = req.Cookie("username")
+    if err == nil {
+        var cookievalue = cookie.Value
+        fmt.Println(cookievalue)
+    }
+    fmt.Println(temploc+tempdev+cookie.Value)
+    fmt.Println(tempdev+temploc+cookie.Value)
+    if _, err := db.Exec("DELETE FROM allofusdbmysql2.userlocationdevices WHERE UserInfoID =?",(tempdev+temploc+cookie.Value))
          err != nil{
-    //if err != nil {
-        //http.Redirect(res, req, "/login", 301)
         fmt.Println("Request failed.")
+        fmt.Println(err)
         return
     }else{
         fmt.Println("Susscessfully Deleted.")

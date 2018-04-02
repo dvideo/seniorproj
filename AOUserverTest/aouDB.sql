@@ -16,21 +16,16 @@ CREATE TABLE allofusdbmysql2.userTable (
   PRIMARY KEY (Userid)
   );
 
-CREATE TABLE allofusdbmysql2.userLocation (
-  Username VARCHAR(45) NOT NULL,
-  Location VARCHAR(45) NOT NULL,
-  UserInfoID VARChar(50)NOT NULL,
+CREATE TABLE allofusdbmysql2.userlocationdevices (
+	Username VARCHAR(45) NOT NULL,
+    location varchar(45) Not Null,
+	device VARCHAR(45) NOT NULL,
+    CreatedDate DATETIME NOT NULL,
+	UserInfoID VARChar(50)NOT NULL,
 
   PRIMARY KEY (UserInfoID)
   );
-CREATE TABLE allofusdbmysql2.userdevice (
-  Username VARCHAR(45) NOT NULL,
-  device VARCHAR(45) NOT NULL,
-  UserInfoID VARChar(50)NOT NULL,
-
-  PRIMARY KEY (UserInfoID)
-  );
-
+  
 CREATE TABLE allofusdbmysql2.userIPAddress (
   Userid INT NOT NULL AUTO_INCREMENT,
   IP VARCHAR(45) NULL,
@@ -84,9 +79,5 @@ CREATE TABLE allofusdbmysql2.stats (
   TimeCreated INT NULL,
   PRIMARY KEY (PostID)
   );
-  
-INSERT INTO allofusdbmysql2.userLocation values ('Jbeltran95','New York','Danburyjohnnybeltran');
-INSERT INTO allofusdbmysql2.userLocation values ('Jbeltran95','New York','Danburyjohnnybeltran2');
-INSERT INTO allofusdbmysql2.userLocation values ('Jbeltran95','New York','Danburyjohnnybeltran3');
 
 select * from allofusdbmysql2.UserTable;

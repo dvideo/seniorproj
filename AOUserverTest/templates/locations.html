@@ -33,8 +33,9 @@ table, td {
 				<!-- Table header -->
                     <thead>
                     <tr>
-                        <th scope="col">Username</th>
                         <th scope="col">Location</th>
+                        <th scope="col">Device</th>
+                        <th scope="col">Date Created</th>
                         <th scope="col">Delete</th>
                     </tr>
                     </thead>
@@ -48,9 +49,9 @@ table, td {
                     <tbody>
                     {{ range . }}
                     <tr>
-  						<td>{{ .Username }}</td>
-                        <td>{{ .Loc }}</td>
-                        <form action="/locations" method="post">
+  						<td>{{ .Loc }}</td>
+                        <td>{{ .Device }}</td>
+                        <td>{{ .Date }}</td>
  					 <td><input type="submit" value="Delete" onclick="deleteRow(this)"></td>
 					</tr>
                     {{ end }}
@@ -64,19 +65,25 @@ table, td {
 		
 		<br>
 		
-		<div class="posting">
-			<div class="container">
-				 
-				<form action="/locations" method="post">
-						<input type="submit" value="Delete Locations" onclick="alert('Deleted All Locations');window.location.reload()"></input>
-				</form>
-				
-			</div>
-		</div>
 <script>
 function deleteRow(r) {
     var i = r.parentNode.parentNode.rowIndex;
+    var table = document.getElementById('myTable');
+    var loc = table.rows[i].cells[1].innerHTML; //probably gonna change to 0
+    var dev = table.rows[i].cells[0].innerHTML; //dev change to 1
+    //alert(loc);
+    post()
     document.getElementById("myTable").deleteRow(i);
+    
+    var d = new Date();
+    d.setTime(d.getTime() + (1 * 24 * 60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = "location" + "=" + loc + ";" + expires + ";path=/";
+    document.cookie = "device"+"="+dev+";" + expires + ";path=/";
+}
+function post() {
+    document.body.innerHTML += '<form id="dynForm" action="/locations" method="post"><input type="hidden" name="q" value="a" onclick="alert("Deleted location/device");window.location.reload()"></form>';
+	document.getElementById("dynForm").submit();
 }
 </script>
 <footer>
