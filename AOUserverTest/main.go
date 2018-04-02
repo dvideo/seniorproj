@@ -243,7 +243,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     question := req.FormValue("email2")
 
     var user string
-    //var userEmail string 
+     
 
     fmt.Println("email = " + email)
     fmt.Println("un = " + username)
