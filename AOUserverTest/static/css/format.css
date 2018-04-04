@@ -121,6 +121,48 @@ label, input, select, textarea {
 	clear: both;
 }
 
+.privacy {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	align-content: center;
+	width: 35%;
+	border-radius: 3px;
+	background-color: #ABB2B9;
+	margin-left: 80px;
+}
+
+.privacy1 {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	align-content: center;
+	width: 35%;
+	border-radius: 3px;
+	background-color: #ABB2B9;
+	margin-left: 80px;
+	margin-top: 40px;
+}
+
+.container {
+	padding: .5px .5px;
+}
+
+.coverArt {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	transition: 0.3s;
+	width: 500px;
+	border-radius: 3px;
+	float: right;
+	background-color: #ABB2B9;
+	margin-right: 80px;
+	margin-top: 40px;
+}
+
+img {
+	border-radius: 5px 5px 0 0;
+}
+
+.container {
+	padding: .5px .5px;
+}
+
 #title {
 	padding-left: 10px;
 	color: white;

@@ -5,44 +5,9 @@
 		<title>{{ .name}}'s Settings</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
-		<link type="text/css" rel="stylesheet" href="/static/css/format.css">
+		<link type="text/css" rel="stylesheet" href="static/css/format.css">
 		<meta name="description" content="A place to view and change any material that is private or public.">
-		<style>
-		.posting {
-			box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-			align-content: center;
-			width: 35%;
-			border-radius: 3px;
-			background-color: #ABB2B9;
-		}
-
-		img {
-			border-radius: 5px 5px 0 0;
-		}
 		
-		.container {
-			padding: .5px .5px;
-		}
-		</style>
-		
-		<style>
-		.coverArt {
-			box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-			transition: 0.3s;
-			width: 50%;
-			border-radius: 3px;
-			float: right;
-			background-color: #ABB2B9;
-		}
-
-		img {
-			border-radius: 5px 5px 0 0;
-		}
-		
-		.container {
-			padding: .5px .5px;
-		}
-		</style>
 		<link rel="stylesheet" type="text/css" href="format.css">
 	</head>
 	
@@ -71,7 +36,7 @@
 		</div>
 		
 		<!--<img src="img/logo.png" alt="all-of.us" ></img>-->
-		<div class="posting">
+		<div class="privacy1">
 			<div class="container">
 			<h2>Privacy Settingss</h2>
 			</div>
@@ -79,7 +44,7 @@
 		
 		<br>
 		
-		<div class="posting">
+		<div class="privacy">
 			<div class="container">
 				<h4><b>Change name/username</b></h4> 
 				<button type="button" onclick="ChangeName()" value="changeName">Change Name</button>
@@ -91,7 +56,7 @@
 
 		<br>
 
-		<div class="posting">
+		<div class="privacy">
 			<div class="container">
 				<h4><b>Friends</b></h4> 
 					<button type="button" value="blockFriend" onclick="alert('Your friend has been blocks')">Block Friends</button>
@@ -103,7 +68,7 @@
 		<br>
 		
 		
-		<div class="posting">
+		<div class="privacy">
 			<div class="container">
 				<h4><b>Location Services</b></h4> 
 				<!--<button type="button" value="allow" onclick="alert('Loading past locations')">View locations</button> -->
@@ -114,7 +79,7 @@
 		
 		<br>
 		
-		<div class="posting">
+		<div class="privacy">
 			<div class="container">
 				<h5><b>Deactivate Account</b></h5> 
 				<button type="button" value="deactivate" onclick="AreYouSure()">Deactivate Account</button>
