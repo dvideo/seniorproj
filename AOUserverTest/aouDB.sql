@@ -57,6 +57,7 @@ CREATE TABLE allofusdbmysql2.userPost (
   Author VARCHAR(255) NULL,
   Recipient VARCHAR(255) NULL,
   Photo VARCHAR(255) NULL,
+  Status VARCHAR(350) NULL,
   Video VARCHAR(255) NULL,
   Meme1 VARCHAR(255) NULL,
   Meme2 VARCHAR(255) NULL,
