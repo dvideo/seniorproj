@@ -200,30 +200,20 @@ img {
 	margin-top: -10px;
 }
 
-#star {
-	position: absolute;
-	bottom: 43px;
-	left: 10px;
+
+.requiredstuff {
+	opacity: 0.2;
+	float: right;
+}
+
+
+.star {
 	float: left;
 }
 
-#passwordstuff {
-	position: absolute;
-	bottom: 40px;
-	left: 0;
-	font-size: 10px;
+.star:hover + .requiredstuff{
+	opacity: 1;
+	
 }
 
-#plus {
-	position: absolute;
-	bottom: 35px;
-	left: 10px;
-	float: left;
-}
 
-#birthdaystuff {
-	position: absolute;
-	bottom: 30px;
-	left: 0;
-	font-size: 10px;
-}
