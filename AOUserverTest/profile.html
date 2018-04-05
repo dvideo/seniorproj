@@ -179,20 +179,6 @@
 			var curRating = 0;
 			var ratingIsAdjustable = true;
 			
-			/*
-			Colors from Stat_Gradients.html
-			Start #1e5799
-			Gradient1 #4496B6
-			Gradient2 #D3D1F8
-			Gradient3 #bfffff
-			Gradient4 #BFFFDF
-			Gradient5 #BFFFBF
-			Gradient6 #EFFFBF
-			Gradient7 #FFEFBF
-			Gradient8 #FFDFBF
-			Gradient9 #FFCFBF
-			Gradient10 #FFBFBF
-			*/
 			var startColor = new RGBColor(30, 87, 153);
 			var endColors = [
 				new RGBColor(68, 150, 182),
@@ -250,7 +236,7 @@
 			
 			/**
 			 * Makes the stat info bar visible by moving it upward and change the gradient
-			 * to a moving bar.
+			 * to a moving bar. 123
 			 */
 			function showStatInfo()
 			{
@@ -611,6 +597,48 @@
 
 					window.addEventListener( 'DOMContentLoaded', init, false);
 				</script>
+		
+			<style>
+				.postDropDown {
+					background-color: #ABB2B9;
+					color: white;
+					padding: 16px;
+					font-size: 16px;
+					border: none;
+					cursor: pointer;
+				}
+
+				.postDropDown:hover {
+					background-color: #ABB2B9;
+				}
+
+				.dropdown {
+					position: relative;
+					display: inline-block;
+				}
+
+				.dropdown-content {
+					display: none;
+					position: absolute;
+					background-color: #ABB2B9;
+					min-width: 160px;
+					overflow: auto;
+					box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+					z-index: 1;
+				}
+
+				.dropdown-content a {
+					color: black;
+					padding: 12px 16px;
+					text-decoration: none;
+					display: block;
+				}
+
+				.dropdown a:hover {background-color: #ddd}
+
+				.show {display:block;}
+			</style>
+
 
 		<link rel="stylesheet" type="text/css" href="format.css">
 	</head>
@@ -623,7 +651,6 @@
 		<li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
 		<li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
 		<li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
-		<li><a href=/locations> Locations</a></li>
 		<li><a href="/slideshow"> Slideshow</a></li>
 		<li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
 	</ul>
@@ -674,17 +701,56 @@
 			<div class="container">
 			<img src="photo.png" alt="profilePicture" style="width:100%">
 			<h1>Hello {{ .userName}}</h1>
-			<a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a>
-			<a href="/logout"><i class="fa fa-power-off"></i> Logout</a>
+			<div class="dropdown">
+				<button onclick="myFunction()" class=".postDropDown">Create a post</button>
+					<div id="myDropdown" class="dropdown-content">
+						<form method="POST" action="/signup">
+									
+							<label for="status">Status: </label> 
+							<textarea type="text" name="email" placeholder="What you up to?" rows="3" cols="40"></textarea>
+							<br class="clear" />
+											
+							<label for="uploadPicture">Upload a Picture: </label>
+							<input type="file" name="picture" accept="img/*">
+											
+											
+							<label>One field is required.</label><br>
+							<input type="submit" value="Submit Post" id="submitButton">
+									
+						</form>
+					</div>
+				</div>
+
+			<script>
+					/* Button toggles the posting content */
+					function myFunction() {
+							document.getElementById("myDropdown").classList.toggle("show");
+					}
+
+					// Close the dropdown if the user clicks outside of it
+					window.onclick = function(event) {
+						if (!event.target.matches('..postDropDown')) {
+
+							var dropdowns = document.getElementsByClassName("dropdown-content");
+							var i;
+							for (i = 0; i < dropdowns.length; i++) {
+								var openDropdown = dropdowns[i];
+								if (openDropdown.classList.contains('show')) {
+									openDropdown.classList.remove('show');
+								}
+							}
+						}
+					}
+			</script>
+
 			</div>
 		</div>
+		
+
 		
 		
 		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		<h3>Recents Posts</h3>
-
-		<!--   Sends stat# and calculate average every 10 seconds -->
-		<button onclick="sendStatAvg()">Try it</button>
 
 		<div class="posting">
 				<img src="photo.png" alt="posted Photo or Status" style="width:100%">

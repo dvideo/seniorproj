@@ -121,6 +121,39 @@ label, input, select, textarea {
 	clear: both;
 }
 
+.privacy {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	align-content: center;
+	width: 35%;
+	border-radius: 3px;
+	background-color: #ABB2B9;
+	height: 650px;
+}
+
+
+.container {
+	padding: .5px .5px;
+}
+
+.coverArt {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	transition: 0.3s;
+	width: 500px;
+	border-radius: 3px;
+	float: right;
+	background-color: #ABB2B9;
+	margin-right: 80px;
+	margin-top: 40px;
+}
+
+img {
+	border-radius: 5px 5px 0 0;
+}
+
+.container {
+	padding: .5px .5px;
+}
+
 #title {
 	padding-left: 10px;
 	color: white;
@@ -158,30 +191,20 @@ label, input, select, textarea {
 	margin-top: -10px;
 }
 
-#star {
-	position: absolute;
-	bottom: 43px;
-	left: 10px;
+
+.requiredstuff {
+	opacity: 0.0;
 	float: left;
 }
 
-#passwordstuff {
-	position: absolute;
-	bottom: 40px;
-	left: 0;
-	font-size: 10px;
-}
 
-#plus {
-	position: absolute;
-	bottom: 35px;
-	left: 10px;
+.star {
 	float: left;
 }
 
-#birthdaystuff {
-	position: absolute;
-	bottom: 30px;
-	left: 0;
-	font-size: 10px;
+.star:hover + .requiredstuff{
+	opacity: 1;
+	
 }
+
+

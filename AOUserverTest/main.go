@@ -483,28 +483,58 @@ func settings(res http.ResponseWriter, req *http.Request) {
 
 func profile(res http.ResponseWriter, req *http.Request) {
     if req.Method != "POST" {
-        http.ServeFile(res, req, "profile.html")
+        http.ServeFile(res, req, "/profile.html")
         return
     }
     
     //rating := req.FormValue("stat-info")
+    cookieUserName, _ := req.Cookie("username")
     
     var avgStat float32
     var fName string
     var lName string
-    username := req.FormValue("userName")
+    var postID int
+
+    statusUpdate := req.FormValue("statusUpdate")
+    if(rowExists("SELECT PostID FROM allofusdbmysql2.userPost WHERE Username=?",cookieUserName)){
+        //Get last postID
+        //Add 1 and use the postID result
+        err := db.QueryRow("SELECT PostID FROM allofusdbmysql2.userPost WHERE username=?", cookieUserName).Scan(&postID)
+        postID =+ 1
+        db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Status) Values(?,?)", postID, statusUpdate)
+        if err != nil{
+            http.Redirect(res, req, "/profile", 301)
+        }
+    }else{
+        //NO post yet, postID equals 1
+        postID = 1
+        db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Status) Values(?,?)", postID, statusUpdate)
+        if err != nil{
+            http.Redirect(res, req, "/profile", 301)
+        }
+        
+    }
     
-    db.QueryRow("SELECT fName, lName FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&fName, &lName)
+
+    db.QueryRow("SELECT fName, lName FROM allofusdbmysql2.UserTable WHERE Username=?", cookieUserName).Scan(&fName, &lName)
+    if err != nil {
+        http.Redirect(res, req, "/profile", 301)
+        return
+    }
+    
+//    err := db.QueryRow("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?", username).Scan(&postID)
+//    if err != nil{
+//        fmt.Print("h")
+//    }    //postID =+1;
+    
+    
+    err := db.QueryRow("SELECT StatAvg FROM allofusdbmysql2.statPost WHERE Username=?", cookieUserName).Scan(&avgStat)
     if err != nil {
         http.Redirect(res, req, "/login", 301)
         return
     }
+        
     
-     err := db.QueryRow("SELECT StatAvg FROM allofusdbmysql2.statPost WHERE Username=?", username).Scan(&avgStat)
-        if err != nil {
-            http.Redirect(res, req, "/login", 301)
-            return
-        }
     
     
     /*err := db.QueryRow("INSERT INTO allofusdbmysql2.stats (PostID, statValue) VALUES (?, ?)", num rating)//.Scan(&databaseUsername)
@@ -516,6 +546,7 @@ func profile(res http.ResponseWriter, req *http.Request) {
     num+1*/
 
 }
+
 func loadlocationstable(res http.ResponseWriter, req *http.Request){
     var un string
     cookie, _ := req.Cookie("username")  

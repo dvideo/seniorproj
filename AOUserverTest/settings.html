@@ -7,42 +7,9 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
 		<link type="text/css" rel="stylesheet" href="/static/css/format.css">
 		<meta name="description" content="A place to view and change any material that is private or public.">
-		<style>
-		.posting {
-			box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-			align-content: center;
-			width: 35%;
-			border-radius: 3px;
-			background-color: #ABB2B9;
-		}
-
-		img {
-			border-radius: 5px 5px 0 0;
-		}
 		
-		.container {
-			padding: .5px .5px;
-		}
-		</style>
 		
-		<style>
-		.coverArt {
-			box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-			transition: 0.3s;
-			width: 50%;
-			border-radius: 3px;
-			float: right;
-			background-color: #ABB2B9;
-		}
-
-		img {
-			border-radius: 5px 5px 0 0;
-		}
 		
-		.container {
-			padding: .5px .5px;
-		}
-		</style>
 		<link rel="stylesheet" type="text/css" href="format.css">
 	</head>
 	
@@ -55,7 +22,6 @@
 		<li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
 		<li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
 		<li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
-		<li><a href=/locations> Locations</a></li>
 		<li><a href="/slideshow"> Slideshow</a></li>
 		<li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
 	</ul>
@@ -71,51 +37,29 @@
 		</div>
 		
 		<!--<img src="img/logo.png" alt="all-of.us" ></img>-->
-		<div class="posting">
+		<div class="privacy">
 			<div class="container">
 			<h2>Privacy Settingss</h2>
-			</div>
-		</div>
-		
-		<br>
-		
-		<div class="posting">
-			<div class="container">
+			<br>
+			<br>
 				<h4><b>Change name/username</b></h4> 
 				<button type="button" onclick="ChangeName()" value="changeName">Change Name</button>
 				
 				<button type="button" onclick="ChangeUser()" value="changeUserName">Change UserName</button>
 				<p id="optionUser"></p>
-			</div>
-		</div>
-
-		<br>
-
-		<div class="posting">
-			<div class="container">
+				<br>
+				<br>
 				<h4><b>Friends</b></h4> 
 					<button type="button" value="blockFriend" onclick="alert('Your friend has been blocks')">Block Friends</button>
-					
-					<button type="button" value="resrictFriend" onclick="alert('Friends Rescricted')">Rescrict Friends</button>
-			</div>
-		</div>
-		
-		<br>
-		
-		
-		<div class="posting">
-			<div class="container">
+				<br>
+				<br>
+				<br>
 				<h4><b>Location Services</b></h4> 
 				<!--<button type="button" value="allow" onclick="alert('Loading past locations')">View locations</button> -->
 				<a href=/locations>View locations</button></a>
-						
-			</div>
-		</div>
-		
-		<br>
-		
-		<div class="posting">
-			<div class="container">
+				<br>
+				<br>
+				<br>
 				<h5><b>Deactivate Account</b></h5> 
 				<button type="button" value="deactivate" onclick="AreYouSure()">Deactivate Account</button>
 				<button type="button" value="reactiveate" onclick="Reactivate()">Reactivate Account</button>
