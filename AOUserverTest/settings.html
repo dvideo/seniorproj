@@ -5,7 +5,7 @@
 		<title>{{ .name}}'s Settings</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
-		<link type="text/css" rel="stylesheet" href="/static/css/format.css">
+		<link type="text/css" rel="stylesheet" href="static/css/format.css">
 		<meta name="description" content="A place to view and change any material that is private or public.">
 		
 		
@@ -37,51 +37,24 @@
 		</div>
 		
 		<!--<img src="img/logo.png" alt="all-of.us" ></img>-->
-		<div class="privacy1">
-			<div class="container">
-			<h2>Privacy Settingss</h2>
-			</div>
-		</div>
-		
-		<br>
-		
 		<div class="privacy">
 			<div class="container">
+			<h2>Privacy Settingss</h2>
+			
 				<h4><b>Change name/username</b></h4> 
 				<button type="button" onclick="ChangeName()" value="changeName">Change Name</button>
 				
 				<button type="button" onclick="ChangeUser()" value="changeUserName">Change UserName</button>
 				<p id="optionUser"></p>
-			</div>
-		</div>
-
-		<br>
-
-		<div class="privacy">
-			<div class="container">
+			
 				<h4><b>Friends</b></h4> 
 					<button type="button" value="blockFriend" onclick="alert('Your friend has been blocks')">Block Friends</button>
 					
-					<button type="button" value="resrictFriend" onclick="alert('Friends Rescricted')">Rescrict Friends</button>
-			</div>
-		</div>
 		
-		<br>
-		
-		
-		<div class="privacy">
-			<div class="container">
 				<h4><b>Location Services</b></h4> 
 				<!--<button type="button" value="allow" onclick="alert('Loading past locations')">View locations</button> -->
 				<a href=/locations>View locations</button></a>
-						
-			</div>
-		</div>
 		
-		<br>
-		
-		<div class="privacy">
-			<div class="container">
 				<h5><b>Deactivate Account</b></h5> 
 				<button type="button" value="deactivate" onclick="AreYouSure()">Deactivate Account</button>
 				<button type="button" value="reactiveate" onclick="Reactivate()">Reactivate Account</button>
