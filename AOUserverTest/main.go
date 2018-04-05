@@ -483,7 +483,7 @@ func settings(res http.ResponseWriter, req *http.Request) {
 
 func profile(res http.ResponseWriter, req *http.Request) {
     if req.Method != "POST" {
-        http.ServeFile(res, req, "/profile.html")
+        http.ServeFile(res, req, "profile.html")
         return
     }
     
