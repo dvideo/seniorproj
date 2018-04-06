@@ -6,7 +6,7 @@
   <!-- disable zooming -->
   <meta name="viewport" content="initial-scale=1.0, user-scalable=0" />
   
-  <title>Carousel 2 - dynamic &middot; Intro to CSS 3D transforms &rsaquo; Examples</title>
+  
   
   <link rel="stylesheet" href="static/css/style.css" media="screen" />
 
@@ -43,13 +43,6 @@
               transition: transform 1s;
     }
 
-    #carousel.panels-backface-invisible figure {
-      -webkit-backface-visibility: hidden;
-         -moz-backface-visibility: hidden;
-           -o-backface-visibility: hidden;
-              backface-visibility: hidden;
-    }
-
     #carousel figure {
       display: block;
       position: absolute;
@@ -79,68 +72,40 @@
 <header>
   <h1 id="title">All of Us</h1>
 </header>
-
 <ul id="links">
-  <li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
-  <li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
-  <li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
-  <li><a href="/templates/locations"> Locations</a></li>
-  <li><a href="/slideshow"> Slideshow</a></li>
-  <li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
-</ul>
-
+    <li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
+    <li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
+    <li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
+    <li><a href="/slideshow"> Slideshow</a></li>
+    <li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
+  </ul>
  <audio controls>
   <source src="static/img/song.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
   </audio>
 
-<h2>Logic - "1-800-273-8255 Slideshow"</h2>
 <body>
-
-  <h1>Carousel 2 - dynamic</h1>
-
+  <h1>Logic - "1-800-273-8255 Slideshow"</h2>
   <section class="container">
     <div id="carousel">
-      <figure><img src="static/img/stats.png" style="width:100%"> </figure>
-      <figure><img src="static/img/coverart.jpeg" style="width:100%"></figure>
-      <figure><img src="static/img/logo.png" style="width:100%"></figure>
-      <figure>4</figure>
-      <figure>5</figure>
-      <figure>6</figure>
-      <figure>7</figure>
-      <figure>8</figure>
-      <figure>9</figure>
-      <figure>10</figure>
-      <figure>11</figure>
-      <figure>12</figure>
-      <figure>13</figure>
-      <figure>14</figure>
-      <figure>15</figure>
-      <figure>16</figure>
-      <figure>17</figure>
-      <figure>18</figure>
-      <figure>19</figure>
-      <figure>20</figure>
+      <figure><img src="static/img/stats.jpg" style="width:100%"> </figure>
+      <figure><img src="static/img/coverart.jpg" style="width:100%"></figure>
+      <figure><img src="static/img/logo.jpg"  style="width:100%" "></figure>
+      <figure><img src="static/img/logic.jpg"  style="width:100%" "></figure></figure>
+      <figure><img src="static/img/stats2.jpg"  style="width:100%" "></figure></figure>
+
     </div>
   </section>
 
   <section id="options">
+
     <p>
-      <label for="panel-count">panels</label>
-      <input type="range" id="panel-count" value="9" min="3" max="20" />
+      <input id="panel-count" value="5" hidden>
     </p>
 
     <p id="navigation">
-      <button id="previous" data-increment="-1">Previous</button>
       <button id="next" data-increment="1">Next</button>
-    </p>
-
-    <p>
-      <button id="toggle-axis">Toggle Carousel Axis</button>
-    </p>
-
-    <p>
-      <button id="toggle-backface-visibility">Toggle Backface Visibility</button>
+      <button id="previous" data-increment="-1">Back</button>
     </p>
 
   </section>
@@ -151,7 +116,6 @@
 
     function Carousel3D ( el ) {
       this.element = el;
-
       this.rotation = 0;
       this.panelCount = 0;
       this.totalPanelCount = this.element.children.length;
@@ -209,7 +173,7 @@
 
       var carousel = new Carousel3D( document.getElementById('carousel') ),
           panelCountInput = document.getElementById('panel-count'),
-          axisButton = document.getElementById('toggle-axis'),
+          //axisButton = document.getElementById('toggle-axis'),
           navButtons = document.querySelectorAll('#navigation button'),
 
           onNavButtonClick = function( event ){
@@ -222,24 +186,26 @@
       carousel.panelCount = parseInt( panelCountInput.value, 10);
       carousel.modify();
 
-
+/*
       axisButton.addEventListener( 'click', function(){
         carousel.isHorizontal = !carousel.isHorizontal;
         carousel.modify();
       }, false);
-
+      */
+/*
       panelCountInput.addEventListener( 'change', function( event ) {
         carousel.panelCount = event.target.value;
         carousel.modify();
       }, false);
-
+*/
       for (var i=0; i < 2; i++) {
         navButtons[i].addEventListener( 'click', onNavButtonClick, false);
       }
-
+      /*
       document.getElementById('toggle-backface-visibility').addEventListener( 'click', function(){
         carousel.element.toggleClassName('panels-backface-invisible');
       }, false);
+      */
 
       setTimeout( function(){
         document.body.addClassName('ready');
@@ -254,10 +220,7 @@
   <p id="disclaimer">Sorry, your browser does not support CSS 3D transforms. This example may be broken.</p>
 
   <footer>
-  <p><a href="../">Intro to CSS 3D transforms</a> by David DeSandro</p>
-  <p>Article content licensed <a href="http://creativecommons.org/licenses/by/2.0/">CC-BY</a>.
-      All example code licensed <a href="http://desandro.mit-license.org/">MIT</a>.</p>
-  <p><a href="https://github.com/desandro/3dtransforms/issues/">Help improve these docs. Open an issue or pull request.</a></p>
+  <p id="footertext">Copyright 2018</p>
 </footer>
 
 
