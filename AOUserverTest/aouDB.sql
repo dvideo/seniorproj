@@ -3,16 +3,16 @@ CREATE TABLE allofusdbmysql2.userTable (
   Userid INT NOT NULL AUTO_INCREMENT,
   fName VARCHAR(45) NULL,
   lName VARCHAR(45) NULL,
-  Username VARCHAR(45) NULL COMMENT 'Optional ',
+  Username VARCHAR(45) NULL,
   Password VARCHAR(100) NULL,
-  MaritalStatus VARCHAR(45) NULL,
+  #MaritalStatus VARCHAR(45) NULL,
   DateOfBirth INT NULL,
   Email VARCHAR(45) NULL,
-  IP VARCHAR(45) NULL,
-  Privacy VARCHAR(45) NULL,
-  TimeAccountCreated INT NULL,
-  OS VARCHAR(45) NULL,
-  Browser VARCHAR(45) NULL,
+  #IP VARCHAR(45) NULL,
+  #Privacy VARCHAR(45) NULL,
+  #TimeAccountCreated INT NULL,
+  #OS VARCHAR(45) NULL,
+  #Browser VARCHAR(45) NULL,
   PRIMARY KEY (Userid)
   );
 
