@@ -17,20 +17,6 @@
 		<script src="static/statBar.js"></script>
 		<script src="static/postFunc.js"></script>
 		<meta name="description" content="Layout of the users date in one location">
-
-
-		
-		<script>
-		function commentFunc() {
-			var x = document.getElementById("commentB");
-			if (x.innerHTML === "") {
-				x.innerHTML = "<textarea></textarea><button><i class='fa fa-mail-reply'></i></button><br>";
-			} else {
-				x.innerHTML = "";
-			}
-		}
-		
-		</script>
 		
 
 	</head>
@@ -123,7 +109,7 @@
 		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		<h3>Recents Posts</h3>
 
-		<div class="posting">
+				<div class="posting">
 				<img src="static/img/photo3.jpeg" alt="posted Photo or Status" style="width:100%">
 				<div id="stat-container">
 					<div id="stat-info">
@@ -138,9 +124,13 @@
 				<button type="share"><i class="fa fa-share"></i>Share</button>
 				<button type="meme"><i class="fa fa-image"></i> Meme</button>
 				<script src="javascipt/meme.js"></script>
-				<button onclick="commentFunc()"><i class="fa fa-comment"></i> Comment</button>
-				<div id="commentB">
+				<div class="dropdown">
+				<button onclick="commentPost()" class=".postDropDown"><i class="fa fa-comment"></i> Comment</button>
+					<div id="commentB" class="dropdown-content">
+						<textarea id"commentPost"type="text" rows="3" cols="40" placeholder="What do you think?"></textarea><button><i class='fa fa-mail-reply'></i></button><br>
+					</div>
 				</div>
+			</div>
 		</div>	
 		
 	<footer>
