@@ -20,7 +20,7 @@
 	
 					
 					
-	function commentPost() {
+	function commentPost1() {
 			document.getElementById("commentB").classList.toggle("show");
 	}
 
