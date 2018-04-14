@@ -2,7 +2,9 @@
 <html>
 
 	<head>
-		<title>{{ .userName}} "'s" Profile</title>
+	{{ range . }}
+		<title> {{.UserN}}'s Profile</title>
+		{{ end }}
 		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
@@ -17,20 +19,6 @@
 		<script src="static/statBar.js"></script>
 		<script src="static/postFunc.js"></script>
 		<meta name="description" content="Layout of the users date in one location">
-
-
-		
-		<script>
-		function commentFunc() {
-			var x = document.getElementById("commentB");
-			if (x.innerHTML === "") {
-				x.innerHTML = "<textarea></textarea><button><i class='fa fa-mail-reply'></i></button><br>";
-			} else {
-				x.innerHTML = "";
-			}
-		}
-		
-		</script>
 		
 
 	</head>
@@ -91,8 +79,10 @@
 		
 		<div class="coverArt">
 			<div class="container">
-			<img src="photo.png" alt="profilePicture" style="width:50%">
-			<h1>Hello {{ .userName}}</h1>
+			<img src="/static/logic.jpg" alt="profilePicture" style="width:50%">
+			{{ range . }}
+			<h1>Hello {{.UserN}}</h1>
+			{{ end }}
 			<div class="dropdown">
 				<button onclick="myFunction()" class=".postDropDown">Create a post</button>
 					<div id="myDropdown" class="dropdown-content">
@@ -123,8 +113,8 @@
 		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		<h3>Recents Posts</h3>
 
-		<div class="posting">
-				<img src="static/img/photo3.jpeg" alt="posted Photo or Status" style="width:100%">
+				<div class="posting">
+				<img src="static/img/photo3.jpg" alt="posted Photo or Status" style="width:100%">
 				<div id="stat-container">
 					<div id="stat-info">
 						<div id="num-votes"></div>
@@ -138,9 +128,13 @@
 				<button type="share"><i class="fa fa-share"></i>Share</button>
 				<button type="meme"><i class="fa fa-image"></i> Meme</button>
 				<script src="javascipt/meme.js"></script>
-				<button onclick="commentFunc()"><i class="fa fa-comment"></i> Comment</button>
-				<div id="commentB">
+				<div class="dropdown">
+				<button onclick="commentPost1()" class=".postDropDown"><i class="fa fa-comment"></i> Comment</button>
+					<div id="commentB" class="dropdown-content">
+						<textarea id="commentPost" type="text" rows="3" cols="40" placeholder="What do you think?"></textarea><button><i class='fa fa-mail-reply'></i></button><br>
+					</div>
 				</div>
+			</div>
 		</div>	
 		
 	<footer>
