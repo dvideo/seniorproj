@@ -496,13 +496,16 @@ func loadUserInfo(res http.ResponseWriter, req *http.Request){
 }
 
 func profile(res http.ResponseWriter, req *http.Request) {
+     //loadUserInfo(res, req)
     cookie, _ := req.Cookie("username")
     cookieUserName := cookie.Value
     
     fmt.Println("\nThis is the userName: ",cookieUserName)
-    
-    loadUserInfo(res, req)
 
+    if req.Method != "POST" {
+        http.ServeFile(res, req, "templates/profile.html")
+       // return
+   }
     
     //rating := req.FormValue("stat-info")
     
@@ -510,46 +513,105 @@ func profile(res http.ResponseWriter, req *http.Request) {
     var numVotes int
     var userID int
     var postID int
+
+
+    db.QueryRow("SELECT Userid FROM allofusdbmysql2.userTable WHERE Username=?",cookieUserName).Scan(&userID)
+    db.QueryRow("SELECT StatAvg, NumVotes FROM allofusdbmysql2.statPost WHERE Userid=?", userID).Scan(&avgStat, &numVotes)
+    
+    fmt.Println("This is the user id: ",userID)
+    statusUpdate := req.FormValue("statusUpdate")
+    statusPhoto := req.FormValue("picture")
+    
+//    req.ParseMultipartForm(32 << 20)
+//    file, statusPhoto,err := req.FormFile("picture")
+//    defer file.Close()
+
+    
+    fmt.Println("hi, This is your status: ", statusUpdate)
+    
+    var jNoPost = `<script>confirm(\'No post was made!\')</script>`
+    
+    //send error that no data was taken
+    if (statusPhoto == "") && (statusUpdate == ""){
+        //http.Error(res, "No post was made", 500)
+        fmt.Fprint(res, jNoPost)
+    }
+    
+    //Post with a both a photo and a picture
+    if (statusPhoto != "") && (statusUpdate != ""){
+        if(rowExists("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?",userID)){
+            //Get last postID
+            //Add 1 and use the postID result
+            err := db.QueryRow("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?", userID).Scan(&postID)
+            postID =+ 1
+            db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Picture, Status) Values(?,?,?)", postID, statusPhoto, statusUpdate)
+            if err != nil{
+                http.Redirect(res, req, "templates/profile.html", 301)
+            }
+            fmt.Println("This is the user postID: ",postID)
+        }else{
+            //NO post yet, postID equals 1
+            postID = 1
+            db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Picture, Status) Values(?,?,?)", postID, statusPhoto, statusUpdate)
+            if err != nil{
+                http.Redirect(res, req, "templates/profile.html", 301)
+            }
+        }
+        
+        fmt.Println("Post with a status & picture: ",postID)
+    }
+
+    //Post with a status update done
+    if statusUpdate != ""{
+            if(rowExists("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?",userID)){
+                //Get last postID
+                //Add 1 and use the postID result
+                err := db.QueryRow("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?", userID).Scan(&postID)
+                postID =+ 1
+                db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Status) Values(?,?)", postID, statusUpdate)
+                if err != nil{
+                    http.Redirect(res, req, "templates/profile.html", 301)
+                }
+                fmt.Println("This is the user postID: ",postID)
+            }else{
+                //NO post yet, postID equals 1
+                postID = 1
+                db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Status) Values(?,?)", postID, statusUpdate)
+                if err != nil{
+                    http.Redirect(res, req, "templates/profile.html", 301)
+                }
+            }
+            fmt.Println("Post with a status: ",postID)
+    }
+    
+    //Post with a photo
+    if statusPhoto != ""{
+            if(rowExists("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?",userID)){
+                //Get last postID
+                //Add 1 and use the postID result
+                err := db.QueryRow("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?", userID).Scan(&postID)
+                postID =+ 1
+                db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Photo) Values(?,?)", postID, statusPhoto)
+                if err != nil{
+                    http.Redirect(res, req, "templates/profile.html", 301)
+                }
+                fmt.Println("This is the user postID: ",postID)
+            }else{
+                //NO post yet, postID equals 1
+                postID = 1
+                    db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Photo) Values(?,?)", postID, statusPhoto)
+                if err != nil{
+                    http.Redirect(res, req, "templates/profile.html", 301)
+                }
+            }
+        fmt.Println("Post with a picture: ",postID)
+    }
+
     
 
-    if req.Method != "POST" {
-//        http.ServeFile(res, req, "profile.html")
-        return
-    }
     
-    db.QueryRow("SELECT Userid FROM allofusdbmysql2.userTable WHERE Username=?",cookieUserName).Scan(&userID)
-    
-    
-    statusUpdate := req.FormValue("statusUpdate")
-    if(rowExists("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?",userID)){
-        //Get last postID
-        //Add 1 and use the postID result
-        err := db.QueryRow("SELECT PostID FROM allofusdbmysql2.userPost WHERE Userid=?", userID).Scan(&postID)
-        postID =+ 1
-        db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Status) Values(?,?)", postID, statusUpdate)
-        if err != nil{
-            http.Redirect(res, req, "/profile", 301)
-            fmt.Println("Error")
-        }
-        fmt.Println("Error")
-    }else{
-        //NO post yet, postID equals 1
-        postID = 1
-        db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Status) Values(?,?)", postID, statusUpdate)
-        if err != nil{
-            http.Redirect(res, req, "/profile", 301)
-        }
-        fmt.Println("Error")
-    }
-    
-    
-     db.QueryRow("SELECT StatAvg, NumVotes FROM allofusdbmysql2.statPost WHERE Userid=?", userID).Scan(&avgStat, &numVotes)
-//    db.Exec("INSET  StatAvg, NumVotes FROM allofusdbmysql2.statPost WHERE Userid=?", userID).Scan(&avgStat, &numVotes)
-//    
-//    if err != nil {
-//        http.Redirect(res, req, "/profile", 301)
-//        return
-//    }
+//    db.Exec("INSET INTO allofusdbmysql2.statPost(StatAvg, NumVotes) Values(?,?) FROMWHERE Userid=?", userID).Scan(&avgStat, &numVotes)
+
 
     
     /*err := db.QueryRow("INSERT INTO allofusdbmysql2.stats (PostID, statValue) VALUES (?, ?)", num rating)//.Scan(&databaseUsername)
