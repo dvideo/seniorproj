@@ -13,8 +13,8 @@
     <style media="screen">
 
     .container {
-      width: 210px;
-      height: 140px;
+      width: 500px;
+      height: 500px;
       position: relative;
       margin: 0 auto 40px;
       border: 1px solid #CCC;
@@ -45,8 +45,8 @@
     #carousel figure {
       display: block;
       position: absolute;
-      width: 186px;
-      height: 116px;
+      width: 500px;
+      height: 500px;
       left: 10px;
       top: 10px;
       border: 2px solid black;
@@ -87,19 +87,23 @@
   <h1>Logic - "1-800-273-8255 Slideshow"</h2>
   <section class="container">
     <div id="carousel">
-      <figure><img src="static/img/stats.jpg" style="width:100%"> </figure>
-      <figure><img src="static/img/coverart.jpg" style="width:100%"></figure>
-      <figure><img src="static/img/logo.jpg"  style="width:100%" ></figure>
-      <figure><img src="static/img/logic.jpg"  style="width:100%" ></figure></figure>
-      <figure><img src="static/img/stats2.jpg"  style="width:100%" ></figure></figure>
+      <figure><img src="static/img/stats.jpg" alt="Picture 1" style="width:500px;height:500px;"> </figure>
+      <figure><img src="static/img/coverart.jpg" alt="Picture 2" style="width:500px;height:500px"></figure>
+      <figure><img src="static/img/logo.jpg" alt="Picture 3" style="width:500px;height:500px" ></figure>
+      <figure><img src="static/img/logic.jpg" alt="Picture 4" style="width:500px;height:500px" ></figure>
+      <!--<figure><img src="static/img/stats2.jpg"  style="width:100%" ></figure> -->
+      <figure><input type="file" name="picture" value="picture" id="picture">
+  <!--maybe add an <img src= > in here and have the src equal the previous input?--></figure> 
+
+
 
     </div>
   </section>
 
   <section id="options">
 
-    <p>
-      <input id="panel-count" value="5" hidden>
+    <p hidden>
+      <input id="panel-count" value="5">
     </p>
 
     <p id="navigation">
