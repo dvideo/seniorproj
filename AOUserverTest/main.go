@@ -437,49 +437,35 @@ func slideshow(res http.ResponseWriter, req *http.Request) {
 
 
 func settings(res http.ResponseWriter, req *http.Request) {
+    cookie, _ := req.Cookie("username")
+    cookieUserName := cookie.Value
+    
+    //loadSettings(res, req)
+
+    
     if req.Method != "POST" {
-        http.ServeFile(res, req, "settings.html")
+        http.ServeFile(res, req, "templates/settings.html")
         return
     }
 
-    userName := req.FormValue("UserName")
-    changeName := req.FormValue("changeName")
-    changeUserName := req.FormValue("changeUserName")
-    
-    deactivate := req.FormValue("deactivate")
-    reactiveate := req.FormValue("reactiveate")
     fName := req.FormValue("fName")
     lName := req.FormValue("lName")
-
-    if reactiveate == "reactiveate"{
-        err := db.QueryRow("INSET UserName FROM allofusdbmysql2.UserTable WHERE Username=?", userName)
-        if err != nil {
-            http.Redirect(res, req, "/login", 301)
-            return
-        }
+    usrN := req.FormValue("UserName")
+    
+    
+    fmt.Println("change name")
+    
+    if (fName != "" && lName != ""){
+        db.QueryRow("UPDATE allofusdbmysql2.UserTable SET fName = ?, lName = ? WHERE Username=?", fName, lName, cookieUserName)
+        fmt.Println("change name")
     }
-    if deactivate == "deactivate"{
-        err := db.QueryRow("REMOVE UserName FROM allofusdbmysql2.UserTable WHERE Username=?", userName)//.Scan(&databaseUsername, &databasePassword)
-            if err != nil {
-                http.Redirect(res, req, "/login", 301)
-                return
-        }
+    if usrN != ""{
+        db.QueryRow("UPDATE allofusdbmysql2.UserTable SET Username = ? WHERE Username=?", usrN, cookieUserName)
+        fmt.Println("change UserName")
     }
-    if changeName == "changeName"{
-        err := db.QueryRow("UPDATE allofusdbmysql2.UserTable SET fName, lName WHERE Username=?", lName, fName)//.Scan(&databaseUsername, &databasePassword)
-            if err != nil {
-                http.Redirect(res, req, "/login", 301)
-                return
-        }
-    }
-    if changeUserName == "changeUserName"{
-        err := db.QueryRow("UPDATE allofusdbmysql2.UserTable SET Username WHERE Username=?", userName)//.Scan(&databaseUsername, &databasePassword)
-            if err != nil {
-                http.Redirect(res, req, "/login", 301)
-                return
-        }
-    }
+    
 }
+
 
 type UserPerson struct {
     UserN string
