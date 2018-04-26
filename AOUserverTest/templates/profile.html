@@ -3,7 +3,7 @@
 
 	<head>
 	{{ range . }}
-		<title> {{.UserN}}'s Profile</title>
+		<title> {{ .UserN}}'s Profile</title>
 		{{ end }}
 		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
@@ -28,12 +28,13 @@
 		<h1 id="title">All of Us</h1>
 	</header>
 	<ul id="links">
-		<li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
-		<li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
-		<li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
-		<li><a href="/slideshow"> Slideshow</a></li>
-		<li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
-	</ul>
+    <li><a href="/../homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
+    <li><a href="/../profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
+    <li><a href="/../settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
+    <li><a href="/../locations"> Locations</a></li>
+    <li><a href="/slideshow"> Slideshow</a></li>
+    <li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
+</ul>
 	<!-- T<img src="photo.png" alt="coverArt" style="width:50%"> -->
 <!-- 	<img src="http://westchesterluxuries.com/email/banneremail.jpg" alt="" border="0" style="width:49%"> -->
 		
@@ -81,12 +82,12 @@
 			<div class="container">
 			<img src="/static/logic.jpg" alt="profilePicture" style="width:50%">
 			{{ range . }}
-			<h1>Hello {{.UserN}}</h1>
+			<h1>Hello {{ .UserN}}</h1>
 			{{ end }}
 			<div class="dropdown">
 				<button onclick="myFunction()" class=".postDropDown">Create a post</button>
 					<div id="myDropdown" class="dropdown-content">
-						<form method="POST" action="/profile">
+						<form enctype="multipart/form-data"method="POST" action="/profile">
 									
 							<label for="status">Status: </label> 
 							<textarea type="text" name="statusUpdate" placeholder="What you up to?" rows="3" cols="40"></textarea>
@@ -97,7 +98,7 @@
 											
 											
 							<label>One field is required.</label><br>
-							<input type="submit" value="Submit Post" id="submitButton">
+							<input type="submit" value="Submit Post" />
 									
 						</form>
 					</div>
