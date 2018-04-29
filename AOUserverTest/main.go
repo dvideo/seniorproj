@@ -436,15 +436,27 @@ func slideshow(res http.ResponseWriter, req *http.Request) {
 }
 
 
+func loadSettings(res http.ResponseWriter, req *http.Request){
+    cookie, _ := req.Cookie("username")
+    cookieUserName := cookie.Value
+    var ur []UserPerson
+//    var fName string
+//    
+//    db.QueryRow("SELECT fName FROM allofusdbmysql2.UserTable WHERE Username=?", cookieUserName).Scan(&fName)
+    
+    ur = append(ur, UserPerson{UserN: cookieUserName})
+    fmt.Print(templ.ExecuteTemplate(res, "settings.html", ur))
+}
+
 func settings(res http.ResponseWriter, req *http.Request) {
     cookie, _ := req.Cookie("username")
     cookieUserName := cookie.Value
     
-    //loadSettings(res, req)
+    loadSettings(res, req)
 
     
     if req.Method != "POST" {
-        http.ServeFile(res, req, "templates/settings.html")
+       // http.ServeFile(res, req, "templates/settings.html")
         return
     }
 
@@ -466,43 +478,96 @@ func settings(res http.ResponseWriter, req *http.Request) {
     
 }
 
-
 type UserPerson struct {
     UserN string
     First string
+    AvgS float32
+    numV int
+    Photo1 string
+    Photo2 string
+    Photo3 string
+    Photo4 string
+    Photo5 string
+    Photo6 string
 }
 
 func loadUserInfo(res http.ResponseWriter, req *http.Request){
     cookie, _ := req.Cookie("username")
     cookieUserName := cookie.Value
     var ur []UserPerson
+//    var avgStat float32
+//    var numVotes int
+//    var userID int
     
-    ur = append(ur, UserPerson{UserN: cookieUserName, First: "AllOfUS"})
-    fmt.Print(templ.ExecuteTemplate(res, "profile.html", ur))
+//    db.QueryRow("SELECT Userid FROM allofusdbmysql2.userTable WHERE Username=?",cookieUserName).Scan(&userID)
+//    
+//    db.QueryRow("SELECT StatAvg, NumVotes FROM allofusdbmysql2.statPost WHERE Userid=?", userID).Scan(&avgStat, &numVotes)
+    
+    ur = append(ur, UserPerson{UserN: cookieUserName})
+    
+    templ.ExecuteTemplate(res, "profile.html", ur)
+    
+    //fmt.Print(templ.ExecuteTemplate(res, "profile.html", ur))
+    
 }
 
-func profile(res http.ResponseWriter, req *http.Request) {
-     //loadUserInfo(res, req)
+
+func displayPost(res http.ResponseWriter, req *http.Request){
     cookie, _ := req.Cookie("username")
     cookieUserName := cookie.Value
     
+    var postID int
+    var userID int
+    var photo string
+    var statusUpdate string
+    
+    db.QueryRow("SELECT Userid FROM allofusdbmysql2.userTable WHERE Username=?",cookieUserName).Scan(&userID)
+    fmt.Println(userID)
+    
+    //loop through userPost and print out each post
+    rows, _ := db.Query("SELECT PostID, Photo, Status FROM allofusdbmysql2.userPost WHERE Userid=?", userID)
+    for rows.Next() {
+        err := rows.Scan(&postID, &photo, &statusUpdate)
+        if err != nil {
+            log.Fatal(err)
+        }
+        log.Println(postID, photo, statusUpdate)
+        
+    }
+    
+     if photo != "" && statusUpdate != ""{
+        //loadData photo and statusUpdate
+    } else if photo != ""{
+        //loadData photo
+    } else if statusUpdate != ""{
+        //loadData status Update
+    } else{
+        fmt.Fprint(res, "<h1>No Posts at this time</h1>")
+    }
+
+                     
+}
+
+func profile(res http.ResponseWriter, req *http.Request) {
+    cookie, _ := req.Cookie("username")
+    cookieUserName := cookie.Value
+    loadUserInfo(res, req)
+    //displayPost(res, req)
     fmt.Println("\nThis is the userName: ",cookieUserName)
 
     if req.Method != "POST" {
-        http.ServeFile(res, req, "templates/profile.html")
+        //http.ServeFile(res, req, "/profile.html")
        // return
    }
     
     //rating := req.FormValue("stat-info")
     
-    var avgStat float32
-    var numVotes int
+
     var userID int
     var postID int
 
-
     db.QueryRow("SELECT Userid FROM allofusdbmysql2.userTable WHERE Username=?",cookieUserName).Scan(&userID)
-    db.QueryRow("SELECT StatAvg, NumVotes FROM allofusdbmysql2.statPost WHERE Userid=?", userID).Scan(&avgStat, &numVotes)
+    //db.QueryRow("SELECT StatAvg, NumVotes FROM allofusdbmysql2.statPost WHERE Userid=?", userID).Scan(&avgStat, &numVotes)
     
     fmt.Println("This is the user id: ",userID)
     statusUpdate := req.FormValue("statusUpdate")
@@ -532,7 +597,8 @@ func profile(res http.ResponseWriter, req *http.Request) {
             postID =+ 1
             db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Picture, Status) Values(?,?,?)", postID, statusPhoto, statusUpdate)
             if err != nil{
-                http.Redirect(res, req, "templates/profile.html", 301)
+               // http.Redirect(res, req, "templates/profile.html", 301)
+                http.ServeFile(res, req, "templates/profile.html")
             }
             fmt.Println("This is the user postID: ",postID)
         }else{
@@ -540,7 +606,8 @@ func profile(res http.ResponseWriter, req *http.Request) {
             postID = 1
             db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Picture, Status) Values(?,?,?)", postID, statusPhoto, statusUpdate)
             if err != nil{
-                http.Redirect(res, req, "templates/profile.html", 301)
+                //http.Redirect(res, req, "templates/profile.html", 301)
+                http.ServeFile(res, req, "templates/profile.html")
             }
         }
         
@@ -556,16 +623,24 @@ func profile(res http.ResponseWriter, req *http.Request) {
                 postID =+ 1
                 db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Status) Values(?,?)", postID, statusUpdate)
                 if err != nil{
-                    http.Redirect(res, req, "templates/profile.html", 301)
+                    //http.Redirect(res, req, "templates/profile.html", 301)
+                    http.ServeFile(res, req, "templates/profile.html")
+                    fmt.Println("Post with post ID 1 status: ",postID)
                 }
-                fmt.Println("This is the user postID: ",postID)
+                fmt.Println("This is the user postID 4: ",postID)
             }else{
                 //NO post yet, postID equals 1
                 postID = 1
                 db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Status) Values(?,?)", postID, statusUpdate)
                 if err != nil{
-                    http.Redirect(res, req, "templates/profile.html", 301)
+                    //http.Redirect(res, req, "templates/profile.html", 301)
+                    http.ServeFile(res, req, "templates/profile.html")
+                    fmt.Println("Post with a postID 2: ",postID)
                 }
+                //http.Redirect(res, req, "templates/profile.html", 301)
+                http.ServeFile(res, req, "templates/profile.html")
+                fmt.Println("Post with a postID 3: ",postID)
+                
             }
             fmt.Println("Post with a status: ",postID)
     }
@@ -579,7 +654,8 @@ func profile(res http.ResponseWriter, req *http.Request) {
                 postID =+ 1
                 db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Photo) Values(?,?)", postID, statusPhoto)
                 if err != nil{
-                    http.Redirect(res, req, "templates/profile.html", 301)
+                    //http.Redirect(res, req, "templates/profile.html", 301)
+                    http.ServeFile(res, req, "templates/profile.html")
                 }
                 fmt.Println("This is the user postID: ",postID)
             }else{
@@ -587,7 +663,8 @@ func profile(res http.ResponseWriter, req *http.Request) {
                 postID = 1
                     db.Exec("INSET INTO allofusdbmysql2.userPost(PostID, Photo) Values(?,?)", postID, statusPhoto)
                 if err != nil{
-                    http.Redirect(res, req, "templates/profile.html", 301)
+                   // http.Redirect(res, req, "templates/profile.html", 301)
+                    http.ServeFile(res, req, "templates/profile.html")
                 }
             }
         fmt.Println("Post with a picture: ",postID)
@@ -646,7 +723,7 @@ func locations(res http.ResponseWriter, req *http.Request) {
     var tempdev string
     loadlocationstable(res,req)
     if req.Method != "POST" {
-        //http.ServeFile(res, req, "locations.html")
+        //http.ServeFile(res, req, "/locations.html")
         return
     }
     var cookie,err = req.Cookie("location")
@@ -677,5 +754,4 @@ func locations(res http.ResponseWriter, req *http.Request) {
         fmt.Println("Susscessfully Deleted.")
         return
     }
-
 }
