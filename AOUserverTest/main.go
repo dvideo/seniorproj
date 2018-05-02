@@ -16,6 +16,7 @@ import("crypto/tls"
     "golang.org/x/crypto/bcrypt"
     "database/sql"
     _ "github.com/go-sql-driver/mysql"
+    "os"
 
     ) 
 
@@ -247,11 +248,13 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     fmt.Println("bday = " + bday)
 
     if (rowExists("SELECT Email FROM allofusdbmysql2.UserTable WHERE Username=?",username)) {
+        //http.alert("Error")
         http.Error(res, "Username already exists. ", 500)
         return
     }
 
     if (rowExists("SELECT Username FROM allofusdbmysql2.UserTable WHERE Email=?",email)) {
+        
         http.Error(res, "Email already exists. ", 500)
         return
     }
@@ -423,18 +426,52 @@ func main() {
 
 func slideshow(res http.ResponseWriter, req *http.Request) {
     if req.Method != "POST" {
-
-
         //http.FileServer(http.Dir("./SlideshowStuff")))
-
-
         //http.Handle("/SlideshowStuff/", http.StripPrefix("/SlideshowStuff/", http.FileServer(http.Dir("./SlideshowStuff"))))
-        
-        http.ServeFile(res, req, "slideshow2.html")
+        http.ServeFile(res, req, "slideshow2.gohtml")
         return
+    }
+
+    picture1 := req.FormValue("picture1")
+    picture1 = "static/img/" + picture1
+    fmt.Println(picture1)
+    //var picname string
+
+    _, err = db.Exec("INSERT INTO allofusdbmysql2.UserPost (Photo) VALUE (?)",picture1)         
+    if err != nil {
+        http.Error(res, "Server error, unable to create your account.", 500)
+        return
+    }
+    fmt.Println("It works")
+    var photo string 
+
+    _, err = db.QueryRow("SELECT Photo FROM allofusdbmysql2.UserPost WHERE Username=? ", username).Scan(&photo)      
+    if err != nil {
+        //http.Redirect(res, req, "/login", 301)
+        http.Error(res, "Server error, unable to create your account.", 500)
+        return
+    } //send this photo back to html to display it
+
+
+    type Test struct {
+    Path     string
+    }
+
+    t, err := template.ParseFiles("slideshow2.gohtml")
+    if err != nil {
+        panic(err)
+    }
+    data := Test{Path: picture1}
+    fmt.Println(data)
+    err = t.Execute(os.Stdout, data)
+    if err != nil {
+        panic(err)
     }
 }
 
+        
+        
+            
 
 func settings(res http.ResponseWriter, req *http.Request) {
     if req.Method != "POST" {

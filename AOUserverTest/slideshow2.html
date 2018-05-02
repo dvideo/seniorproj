@@ -87,16 +87,20 @@
   <h1>Logic - "1-800-273-8255 Slideshow"</h2>
   <section class="container">
     <div id="carousel">
-      <figure><img src="static/img/stats.jpg" alt="Picture 1" style="width:500px;height:500px;"> </figure>
-      <figure><img src="static/img/coverart.jpg" alt="Picture 2" style="width:500px;height:500px"></figure>
-      <figure><img src="static/img/logo.jpg" alt="Picture 3" style="width:500px;height:500px" ></figure>
-      <figure><img src="static/img/logic.jpg" alt="Picture 4" style="width:500px;height:500px" ></figure>
-      <!--<figure><img src="static/img/stats2.jpg"  style="width:100%" ></figure> -->
-      <figure><input type="file" name="picture" value="picture" id="picture">
+      <figure> <form method="POST" action="/slideshow"> 
+        <label for="picture1">pic 1: </label>
+        <input type="file" name="picture1"> 
+        <input type="submit" value="Add photo" id="submitButton">
+        <img src = "static/img/{{.picture1}}" style="width:500px;height:500px"> </figure>
+      </form>
+      <!-- <div id="images"></div> --></figure>
+      <figure><img src="static/img/coverart.jpg" alt="Picture 2" style="width:500px;height:500px"> </figure>
+      <figure><img src="static/img/logo.jpg" alt="Picture 3" style="width:500px;height:500px" > </figure>
+      <figure><img src="static/img/logic.jpg" alt="Picture 4" style="width:500px;height:500px" > </figure>
+      <!--<figure><img src="static/img/stats.jpg" alt="Picture 1" style="width:500px;height:500px;"></figure> -->
+      <figure><img id="blah" src="#" alt="your image" style="width:500px;height:500px"/>
   <!--maybe add an <img src= > in here and have the src equal the previous input?--></figure> 
-
-
-
+  
     </div>
   </section>
 
@@ -115,6 +119,17 @@
 
   <script src="static/utils.js"></script>
   <script>
+    function getImg(){
+    var url=document.getElementById('txt').value;
+    var div=document.createElement('div');
+    var img=document.createElement('img');
+    img.src="static/img/stats.jpg";
+    img.style="width:500px;height:500px"
+    div.appendChild(img);
+    document.getElementById('images').appendChild(div);
+    return false;
+}
+
     var transformProp = Modernizr.prefixed('transform');
 
     function Carousel3D ( el ) {
