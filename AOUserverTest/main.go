@@ -444,6 +444,7 @@ func slideshow(res http.ResponseWriter, req *http.Request) {
         return
     }
     fmt.Println("It works")
+    /*
     var photo string 
 
     _, err = db.QueryRow("SELECT Photo FROM allofusdbmysql2.UserPost WHERE Username=? ", username).Scan(&photo)      
@@ -452,7 +453,7 @@ func slideshow(res http.ResponseWriter, req *http.Request) {
         http.Error(res, "Server error, unable to create your account.", 500)
         return
     } //send this photo back to html to display it
-
+*/
 
     type Test struct {
     Path     string
