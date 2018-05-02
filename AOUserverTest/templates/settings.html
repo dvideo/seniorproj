@@ -2,7 +2,7 @@
 <html>
 
 	<head>
-	{{ramge.}}
+	{{range.}}
 		<title>{{ .UserN}}'s Settings</title>
 		{{ end }}
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
@@ -32,7 +32,7 @@
 			<div class="container">
 			<img src="photo.png" alt="profilePicture">
 			{{ range . }}
-			<h1>Hello {{ .First}}</h1>
+			<h1>Hello {{ .UserN}}</h1>
 			{{ end }}
 			</div>
 		</div>
@@ -43,15 +43,56 @@
 			<h2>Privacy Settingss</h2>
 			<br>
 			<br>
-				<h4><b>Change name/username</b></h4> 
-				<button type="button" onclick="ChangeName()" value="changeName">Change Name</button>
+			
+			
+				<form>
+					<h4><b>Change name/username</b></h4> 
 				
-				<button type="button" onclick="ChangeUser()" value="changeUserName">Change UserName</button>
-				<p id="optionUser"></p>
-				<br>
+					
+<!-- 					<button type="button" onclick="ChangeUser()" value="changeUserName">Change UserName</button> -->
+<!-- 					<p id="optionUser"></p> -->
+					
+					
+					<div class="dropdown">
+						<button onclick="myFunction()" class=".postDropDown">Change Name</button>
+							<div id="myDropdown" class="dropdown-content">
+								<form method="POST" action="/settings">
+											
+									<label for="status">New Name?: </label> <br>
+									<input type="text" name="fName" placeholder="Enter first name:"></input><br>
+									<input type="text" name="lName" placeholder="Enter last name:"></input>
+									<br class="clear" />
+										
+									<input type="submit" value="Submit Change" />
+											
+								</form>
+							</div>
+						</div>
+						
+						
+						
+						<div class="dropdown">
+							<button onclick="myFunction()" class=".postDropDown">Change UserName</button>
+								<div id="myDropdown" class="dropdown-content">
+									<form method="POST" action="/settings">
+												
+										<label for="status">New User Name?: </label> <br>
+										<input type="text" name="UserName" placeholder="Enter new UserName:"></input><br>
+										<br class="clear" />
+											
+										<input type="submit" value="Submit Change" />
+												
+									</form>
+								</div>
+							</div>
+
+					
+					
+				
+				
 				<br>
 				<h4><b>Friends</b></h4> 
-					<button type="button" value="blockFriend" onclick="alert('Your friend has been blocks')">Block Friends</button>
+					<button type="button" value="blockFriend" onclick="alert('Block Friends Coming Soon...')">Block Friends</button>
 				<br>
 				<br>
 				<br>
@@ -64,6 +105,7 @@
 				<h5><b>Deactivate Account</b></h5> 
 				<button type="button" value="deactivate" onclick="AreYouSure()">Deactivate Account</button>
 				<button type="button" value="reactiveate" onclick="Reactivate()">Reactivate Account</button>
+				</form>
 				<!--<p id="message"></p>  -->
 				<p>
 			</div>
@@ -96,24 +138,7 @@
 			}
 		</script>
 		
-		<script>
-			function ChangeUser(){
-					var UserName = prompt("Please enter your new user name", "All of Us");
-					if (person != null) {
-						document.getElementById("demo").innerHTML = "Hello " + UserName + "! How are you today?";
-					}
-				}
-		</script>
-		
 
-		<script>
-			function ChangeName(){
-					var UserName = prompt("Please enter your new name", "All of Us");
-					if (person != null) {
-						document.getElementById("demo").innerHTML = "Hello " + UserName + "! How are you today?";
-					}
-				}
-		</script>
 		
 		<footer>
 			<p id="footertext">Copyright 2018</p>
