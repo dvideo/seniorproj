@@ -16,7 +16,7 @@ import("crypto/tls"
     "golang.org/x/crypto/bcrypt"
     "database/sql"
     _ "github.com/go-sql-driver/mysql"
-    "os"
+    //"os"
 
     ) 
 
@@ -68,6 +68,12 @@ type Mail struct {
     subject  string
     body     string
 }
+
+type SlideshowPhoto struct {
+    Path string
+}
+
+
 var (
     address  string
     geo      GeoIP
@@ -249,18 +255,19 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 
     if (rowExists("SELECT Email FROM allofusdbmysql2.UserTable WHERE Username=?",username)) {
         //http.alert("Error")
-        http.Error(res, "Username already exists. ", 500)
+        log.Println("it exists already")
+        //http.Error(res, "Username already exists. ", 500)
         return
     }
 
     if (rowExists("SELECT Username FROM allofusdbmysql2.UserTable WHERE Email=?",email)) {
-        
         http.Error(res, "Email already exists. ", 500)
         return
     }
 
     if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday=="") || (question==""){
-        http.Error(res, "Error, fields can't be blank. ", 500)
+        //http.Error(res, "Error, fields can't be blank. ", 500)
+        log.Printf("cant")
         return
 
     }
@@ -424,36 +431,71 @@ func main() {
     http.HandleFunc("/profile", profile)
     http.ListenAndServe(":8080", nil)
 }
+/*
+func slideshowPhotos(res http.ResponseWriter, req *http.Request){
+    var un string
+    var photo string
+    cookie, _ := req.Cookie("username")  
+    un = cookie.Value
+    rows, err := db.Query("SELECT Photo FROM allofusdbmysql2.UserPost WHERE Username=?", un) //.Scan(&photo)   
+    //fmt.Println(un)   
+    if err != nil {
+        //http.Redirect(res, req, "/login", 301)
+        http.Error(res, "Error", 500)
+        return
+    }
+    //var pic1 string - add 5 for the 5 photos?
+
+    var ps []SlideshowPhoto 
+    for rows.Next(){
+        err = rows.Scan(&photo)
+        if err != nil {
+            log.Println(err)
+            http.Error(res, " error", http.StatusInternalServerError)
+            return
+        }
+        fmt.Println("testing this thing")
+        ps = append(ps,SlideshowPhoto{Path: photo})
+        //fmt.Println(ps)
+    }
+    fmt.Print(templ.ExecuteTemplate(res, "slideshow2.html", ps))
+
+}
+
+
+func hello(w http.ResponseWriter, r *http.Request){
+
+    //Call to ParseForm makes form fields available.
+    err := r.ParseForm()
+    if err != nil {
+        // Handle error here via logging and then return            
+    }
+
+    name := r.PostFormValue("name")
+    fmt.Fprintf(w, "Hello, %s!", name)
+}
+*/
+
 
 func slideshow(res http.ResponseWriter, req *http.Request) {
+    //slideshowPhotos(res,req)
+    //req.ParseForm()
     if req.Method != "POST" {
-        //http.FileServer(http.Dir("./SlideshowStuff")))
-        //http.Handle("/SlideshowStuff/", http.StripPrefix("/SlideshowStuff/", http.FileServer(http.Dir("./SlideshowStuff"))))
-        http.ServeFile(res, req, "slideshow2.gohtml")
+        http.ServeFile(res, req, "slideshow2.html") //is this what i need to the submit button to work ?
+        //fmt.Println("something happened")
         return
     }
-
-    picture1 := req.FormValue("picture1")
-    picture1 = "static/img/" + picture1
-    fmt.Println(picture1)
-    //var picname string
-
-    _, err = db.Exec("INSERT INTO allofusdbmysql2.UserPost (Photo) VALUE (?)",picture1)         
-    if err != nil {
-        http.Error(res, "Server error, unable to create your account.", 500)
-        return
-    }
-    fmt.Println("It works")
+    
     /*
     var photo string 
 
-    _, err = db.QueryRow("SELECT Photo FROM allofusdbmysql2.UserPost WHERE Username=? ", username).Scan(&photo)      
+    err = db.QueryRow("SELECT Photo FROM allofusdbmysql2.UserPost WHERE Userid=? AND PostID=? ", 4, 83).Scan(&photo)      
     if err != nil {
         //http.Redirect(res, req, "/login", 301)
-        http.Error(res, "Server error, unable to create your account.", 500)
+        http.Error(res, "Server error, unable to select photo.", 500)
         return
     } //send this photo back to html to display it
-*/
+    fmt.Println(photo)
 
     type Test struct {
     Path     string
@@ -463,12 +505,32 @@ func slideshow(res http.ResponseWriter, req *http.Request) {
     if err != nil {
         panic(err)
     }
-    data := Test{Path: picture1}
+    data := Test{Path: "stats.png"} //picture1 instead of photo
     fmt.Println(data)
     err = t.Execute(os.Stdout, data)
     if err != nil {
         panic(err)
     }
+    */
+    /*
+    fmt.Println("was here")
+    pic1 := req.FormValue("pic1")
+    //picture1 = "static/img/" + picture1
+    fmt.Println("here")
+    fmt.Println(pic1)
+    fmt.Println("there")
+    //var picname string
+
+    _, err = db.Exec("INSERT INTO allofusdbmysql2.UserPost (Username,Photo) VALUES (?,?)","dvideo",pic1)         
+    if err != nil {
+        http.Error(res, "Server error, unable to insert photo.", 500)
+        return
+    }
+    fmt.Println("It works")
+    */
+
+
+    
 }
 
         

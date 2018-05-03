@@ -7,8 +7,8 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=0" />
   
   
-  <link rel="stylesheet" href="static/css/style.css" media="screen" />
-  <link type="text/css" rel="stylesheet" href="/static/css/format.css">
+  <link rel="stylesheet" href="/../static/css/style.css" media="screen" />
+  <link type="text/css" rel="stylesheet" href="/../static/css/format.css">
 
     <style media="screen">
 
@@ -72,14 +72,16 @@
   <h1 id="title">All of Us</h1>
 </header>
 <ul id="links">
-    <li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
-    <li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
-    <li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
+    <li><a href="/../homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
+    <li><a href="/../profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
+    <li><a href="/../settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
     <li><a href="/slideshow"> Slideshow</a></li>
     <li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
   </ul>
+
+  <form method="POST" action="/slideshow">
  <audio controls>
-  <source src="static/img/song.mp3" type="audio/mpeg">
+  <source src="/../static/img/song.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
   </audio>
 
@@ -87,52 +89,104 @@
   <h1>Logic - "1-800-273-8255 Slideshow"</h2>
   <section class="container">
     <div id="carousel">
+      
+      {{range . }}
       <figure> 
-        <form method="POST" action="/slideshow">
-        <!--<label for="picture">pic 1: </label> -->
-        <input type="file" name="picture1"> 
-        <img src="static/img/coverart.jpg" id="pic1" style="width:100px;height:100px">
-        <input type="submit"  value="Add Photo" id="Add Photo" onclick="getImg()">
-        <!-- <button onclick="getImg()""> Add Photo </button> -->
-        </form>
-     
-      <!-- <div id="images"></div> --></figure>
-      <figure><img src="static/img/coverart.jpg" alt="Picture 2" style="width:500px;height:500px"> </figure>
-      <figure><img src="static/img/logo.jpg" alt="Picture 3" style="width:500px;height:500px" > </figure>
-      <figure><img src="static/img/logic.jpg" alt="Picture 4" style="width:500px;height:500px" > </figure>
-      <!--<figure><img src="static/img/stats.jpg" alt="Picture 1" style="width:500px;height:500px;"></figure> -->
-      <figure><img id="blah" src="#" alt="your image" style="width:500px;height:500px"/>
-  <!--maybe add an <img src= > in here and have the src equal the previous input?--></figure> 
-  
+        <input type="text" name="pic1" id="picture1"> 
+        <!--<img src="/../static/img/{{.Path}}" alt="/../static/img/{{.Path}}" id="pic1" style="width:100px;height:100px"> -->
+        <!--<input type="submit"  value="Add Photo" id="Add Photo" onclick="getImg()">-->
+        <button type=button onclick="getImg1()"> Add Photo </button>
+
+      </figure>
+
+      <figure>
+        <input type="file" name="picture2" id="picture2"> 
+        <img src="/../static/img/{{.Path}}" alt="/../static/img/{{.Path}}" id="pic2" style="width:100px;height:100px">
+        <button type=button onclick="getImg2()"> Add Photo </button>
+      </figure>
+
+      <figure>
+        <input type="file" name="picture3" id="picture3"> 
+        <img src="/../static/img/{{.Path}}" alt="/../static/img/{{.Path}}" id="pic3" style="width:100px;height:100px">
+        <button type=button onclick="getImg3()"> Add Photo </button>
+      </figure>
+
+      <figure>
+        <input type="file" name="picture4" id="picture4"> 
+        <img src="/../static/img/{{.Path}}" alt="/../static/img/{{.Path}}" id="pic4" style="width:100px;height:100px">
+        <button type=button onclick="getImg4()"> Add Photo </button>
+      </figure>
+      
+      <figure>
+        <input type="file" name="picture5" id="picture5"> 
+        <img src="/../static/img/{{.Path}}" alt="/../static/img/{{.Path}}" id="pic5" style="width:100px;height:100px">
+        <button type=button onclick="getImg5()"> Add Photo </button>
+      </figure> 
+      {{end }}
     </div>
   </section>
+   
 
   <section id="options">
-
     <p hidden>
       <input id="panel-count" value="5">
     </p>
 
     <p id="navigation">
-      <button id="next" data-increment="1">Next</button>
-      <button id="previous" data-increment="-1">Back</button>
+      <button type=button id="next" data-increment="1">Next</button>
+      <button type=button id="previous" data-increment="-1">Back</button>
+      <input type="submit"  value="Save" id="submitButton">    
+      </form> 
     </p>
 
   </section>
 
-  <script src="static/utils.js"></script>
+  <script src="/../static/utils.js"></script>
   <script>
 
-    function getImg() {
+    function getImg1() {
      // document.getElementById("pictureOMG").src = document.getElementById("picture1").value
       var x = document.getElementById("picture1").files[0].name;
+      //x="boy"
       //var x = document.getElementById("picture1").files[0].name; 
       //window.alert("hi")
-      window.alert(x)
-      x = "static/img/" + x
-      document.getElementById("pic1").src = x;
 
-}
+      //window.alert(x)
+
+      x = "/../static/img/" + x
+      document.getElementById("pic1").src = x;
+      return false;
+  }
+
+    function getImg2(){
+      var x = document.getElementById("picture2").files[0].name;
+      x = "/../static/img/" + x
+      document.getElementById("pic2").src = x;
+      return false;
+  }
+     function getImg3(){
+      var x = document.getElementById("picture3").files[0].name;
+      x = "/../static/img/" + x
+      document.getElementById("pic3").src = x;
+      return false;
+  }
+     function getImg4(){
+      var x = document.getElementById("picture4").files[0].name;
+      x = "/../static/img/" + x
+      document.getElementById("pic4").src = x;
+      return false;
+  }
+     function getImg5(){
+      var x = document.getElementById("picture5").files[0].name;
+      x = "/../static/img/" + x
+      document.getElementById("pic5").src = x;
+      return false;
+  }
+
+  //function savePhoto(){
+    //document.getElementById("pic1").src = "static/img/";
+    //return false;
+  //}
 /*
     function getImg(){
     
