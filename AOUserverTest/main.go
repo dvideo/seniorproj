@@ -159,7 +159,7 @@ func SendMessagemain(usr string, req *http.Request) {
     mail.senderId = "allofusnoreply@gmail.com" //defaul allofus email
     mail.toIds = []string{databaseEmail} //users we are sending alerts to email.
     mail.subject = "Security Alert"
-    mail.body = "Dear "+usr+", \n\nYour AllOfUs account was just signed in from an unknown source "+ IPfunction()+" or device"+Device+". You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasn't you please log in to your account and view your activity in the security section\n\nThank you, AllOfUs Team"
+    mail.body = "Dear "+usr+", \n\nYour AllOfUs account was just signed in from an unknown source in ("+ IPfunction()+") using a ("+Device+"). You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasn't you please log in to your account and view your activity in the security section\n\nThank you, AllOfUs Team"
 
     messageBody := mail.BuildMessage()
 
@@ -410,7 +410,7 @@ func main() {
     // templ, err = templ.ParseGlob("templates/*.html")
      templ = template.Must(templ.ParseGlob("templates/*.html"))
     http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:8889)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
+    db, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/allofusdbmysql2") //3306 - johnny //8889 - josh //8889 - elijah
     if err != nil {
         panic(err.Error())
     }
