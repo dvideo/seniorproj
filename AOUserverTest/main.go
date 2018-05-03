@@ -578,16 +578,23 @@ func settings(res http.ResponseWriter, req *http.Request) {
     lName := req.FormValue("lName")
     usrN := req.FormValue("UserName")
     
+    fmt.Println(usrN)
     
-    fmt.Println("change name")
     
+    if usrN != ""{
+        if (rowExists("SELECT Email FROM allofusdbmysql2.UserTable WHERE Username=?",usrN)) {
+            fmt.Println("Error, username already exists.")
+            http.ServeFile(res, req, "settings.html")
+            return
+        }else{
+            db.QueryRow("UPDATE allofusdbmysql2.UserTable SET Username = ? WHERE Username=?", usrN, cookieUserName)
+            fmt.Println("change UserName")
+        }
+    }
+        
     if (fName != "" && lName != ""){
         db.QueryRow("UPDATE allofusdbmysql2.UserTable SET fName = ?, lName = ? WHERE Username=?", fName, lName, cookieUserName)
         fmt.Println("change name")
-    }
-    if usrN != ""{
-        db.QueryRow("UPDATE allofusdbmysql2.UserTable SET Username = ? WHERE Username=?", usrN, cookieUserName)
-        fmt.Println("change UserName")
     }
     
 }
