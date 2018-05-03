@@ -16,6 +16,7 @@ import("crypto/tls"
     "golang.org/x/crypto/bcrypt"
     "database/sql"
     _ "github.com/go-sql-driver/mysql"
+    "github.com/robertkrimen/otto"
     //"os"
 
     ) 
@@ -253,9 +254,11 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     fmt.Println("confpw = " + confPass)
     fmt.Println("bday = " + bday)
 
+    vm := otto.New()
+
     if (rowExists("SELECT Email FROM allofusdbmysql2.UserTable WHERE Username=?",username)) {
         //http.alert("Error")
-        log.Println("it exists already")
+        //log.Println("it exists already")
         //http.Error(res, "Username already exists. ", 500)
         return
     }
@@ -267,9 +270,10 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 
     if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday=="") || (question==""){
         //http.Error(res, "Error, fields can't be blank. ", 500)
-        log.Printf("cant")
+        vm.Run(`
+        alert("error bro");
+        `)
         return
-
     }
 
     if (!strings.ContainsAny(password, "123456789")) || (!strings.ContainsAny(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) || (len(password)<6){
@@ -309,7 +313,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         
             
         if err != nil {
-            http.Error(res, "S1erver error, unable to create your account.", 500)
+            http.Error(res, "Server error, unable to create your account 2.", 500)
             return
         }
         fmt.Println("User created!")
@@ -527,10 +531,7 @@ func slideshow(res http.ResponseWriter, req *http.Request) {
         return
     }
     fmt.Println("It works")
-    */
-
-
-    
+    */    
 }
 
         
