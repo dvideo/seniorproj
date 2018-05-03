@@ -13,7 +13,7 @@
     <form method="POST" action="/signup">
         
             <label for="email">Email: </label> 
-            <input type="text" name="email">  
+            <input type="text" name="email" id="email">  
             <br class="clear" />
             
             <label for="username">Username: </label>
@@ -38,7 +38,7 @@
             
             <!--This will check the birthdate-->
             <label for="bday">Enter your birthday: </label> 
-            <input type="date" name="bday" max="2000-01-02"><div class="star"> * </div><div class="requiredstuff"> must be at least 18 years old</div>
+            <input type="date" name="bday" max="2000-05-03"><div class="star"> * </div><div class="requiredstuff"> must be at least 18 years old</div>
             <br class="clear" />
             
             <label for="email2">Are you a person?</label> 
@@ -46,16 +46,20 @@
             <br class="clear" />
             <br class="clear" />
             
-            <input type="submit" value="Create Account" id="submitButton" onclick="alert()">
+            <input type="submit" value="Create Account" id="submitButton">
 
         
     </form>
     <script>
-
+/*
         function alert(){
-            window.alert("hey");
-
+            if(document.getElementById("email").value == "jgitter1@gaels.iona.edu"){
+                window.alert("hey");
+            }
+            return false;
         }
+        */
+
     </script>
     
     <br class="clear" />

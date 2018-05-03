@@ -6,7 +6,7 @@ CREATE TABLE allofusdbmysql2.userTable (
   Username VARCHAR(45) NULL,
   Password VARCHAR(100) NULL,
   #MaritalStatus VARCHAR(45) NULL,
-  DateOfBirth INT NULL,
+  DateOfBirth VARCHAR(10) NULL,
   Email VARCHAR(45) NULL,
   #IP VARCHAR(45) NULL,
   #Privacy VARCHAR(45) NULL,

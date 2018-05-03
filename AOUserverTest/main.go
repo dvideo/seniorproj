@@ -244,7 +244,6 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 
     var user string
      
-
     fmt.Println("email = " + email)
     fmt.Println("un = " + username)
     fmt.Println("fName = " + fName)
@@ -259,6 +258,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         //http.alert("Error")
         //log.Println("it exists already")
         //http.Error(res, "Username already exists. ", 500)
+        fmt.Println("email")
         return
     }
 
@@ -270,6 +270,8 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday=="") || (question==""){
         //http.Error(res, "Error, fields can't be blank. ", 500)
         //ok := dialog.Message("%s", "Do you want to continue?").Title("Are you sure?").YesNo()
+        fmt.Println("cant have empty fields")
+        http.ServeFile(res, req, "signup.html")
         return
     }
 
@@ -301,7 +303,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         //fmt.Println("hashedPassword = " , hashedPassword , " Err = " , err)
         //fmt.Println("string(password) = " , string(hashedPassword))
         if err != nil {
-            http.Error(res, "Server3 error, unable to create your account.", 500)
+            http.Error(res, "Server error, unable to create your account 3.", 500)
             return
         }
 
