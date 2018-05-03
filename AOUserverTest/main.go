@@ -16,7 +16,6 @@ import("crypto/tls"
     "golang.org/x/crypto/bcrypt"
     "database/sql"
     _ "github.com/go-sql-driver/mysql"
-    "github.com/robertkrimen/otto"
     //"os"
 
     ) 
@@ -254,7 +253,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     fmt.Println("confpw = " + confPass)
     fmt.Println("bday = " + bday)
 
-    vm := otto.New()
+  
 
     if (rowExists("SELECT Email FROM allofusdbmysql2.UserTable WHERE Username=?",username)) {
         //http.alert("Error")
@@ -270,9 +269,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 
     if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday=="") || (question==""){
         //http.Error(res, "Error, fields can't be blank. ", 500)
-        vm.Run(`
-        alert("error bro");
-        `)
+        //ok := dialog.Message("%s", "Do you want to continue?").Title("Are you sure?").YesNo()
         return
     }
 
@@ -433,6 +430,7 @@ func main() {
     http.HandleFunc("/slideshow", slideshow)
     http.HandleFunc("/locations", locations)
     http.HandleFunc("/profile", profile)
+    http.HandleFunc("/homepageAllofUs",homePage)
     http.ListenAndServe(":8080", nil)
 }
 /*
