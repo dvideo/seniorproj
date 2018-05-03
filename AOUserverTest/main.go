@@ -258,41 +258,42 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         //http.alert("Error")
         //log.Println("it exists already")
         //http.Error(res, "Username already exists. ", 500)
-        fmt.Println("email")
+        fmt.Println("Error, username already exists.")
+        http.ServeFile(res, req, "signup.html")
         return
     }
 
     if (rowExists("SELECT Username FROM allofusdbmysql2.UserTable WHERE Email=?",email)) {
-        http.Error(res, "Email already exists. ", 500)
+        fmt.Println("Error, email already exists.")
+        http.ServeFile(res, req, "signup.html")
+        //http.Error(res, "Email already exists. ", 500)
         return
     }
 
     if (email == "") || (username=="")|| (fName=="")|| (lName=="")|| (password=="")|| (confPass=="")|| (bday=="") || (question==""){
         //http.Error(res, "Error, fields can't be blank. ", 500)
         //ok := dialog.Message("%s", "Do you want to continue?").Title("Are you sure?").YesNo()
-        fmt.Println("cant have empty fields")
+        fmt.Println("Error, fields can't be blank.")
         http.ServeFile(res, req, "signup.html")
         return
     }
 
     if (!strings.ContainsAny(password, "123456789")) || (!strings.ContainsAny(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) || (len(password)<6){
-        http.Error(res, "Error, passwords must contain a number, a capital letter, and be at least 7 characters long. ", 500)
+        fmt.Println("Error, passwords must contain a number, a capital letter, and be at least 7 characters long.")
+        http.ServeFile(res, req, "signup.html")
+        //http.Error(res, "Error, passwords must contain a number, a capital letter, and be at least 7 characters long. ", 500)
         return
     }
 
     if password != confPass{
-        http.Error(res, "Error, passwords are not equal, please try again. ", 500)
+        fmt.Println("Error, passwords are not equal, please try again.")
+        http.ServeFile(res, req, "signup.html")
+        //http.Error(res, "Error, passwords are not equal, please try again. ", 500)
         return
     }
 
-
-
-
     //if time.Now().Year()-18 >= bday{
-
     //}
-
-
 
     err := db.QueryRow("SELECT Username FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&user)
 
