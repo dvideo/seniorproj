@@ -292,15 +292,22 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         return
     }
 
+    if question != "Yes" {
+        fmt.Println("Error, must by a person")
+        http.ServeFile(res, req, "signup.html")
+    }
+
     //if time.Now().Year()-18 >= bday{
     //}
 
     err := db.QueryRow("SELECT Username FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&user)
 
     switch {
+        /*
     case err != nil || question!="Yes":
         http.Error(res, "Server error, unable to create your account.", 500)
         return
+        */
     case err == sql.ErrNoRows:
         //fmt.Println("user = " + username + " password = " + password)
         hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 14)
