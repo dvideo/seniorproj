@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	{{ range . }}
+		<title> {{ .UserN}}'s Profile</title>
+		{{ end }}
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+		<link rel="stylesheet" href="/static/css/format.css">
+		<link rel="stylesheet" href="static/css/coverArt.css">
+		<link rel="stylesheet" href="static/css/posting.css">
+		<link rel="stylesheet" href="static/css/statBar.css">
+		<link rel="stylesheet" href="static/css/postFunc.css">
+		<link rel="stylesheet" href="static/css/photoCarouselB.css">
+		<script src="static/utils.js"></script>
+		<script src="static/jqueryStat.js"></script>
+		<script src="static/statBar.js"></script>
+		<script src="static/postFunc.js"></script>
+		<meta name="description" content="Layout of the users date in one location">
+		
+
+	</head>
+	
+	<body>
+	<header>
+		<h1 id="title">All of Us</h1>
+	</header>
+	<ul id="links">
+    <li><a href="/../homepageAllofUs"><i class="glyphicon glyphicon-home"></i> Home </a></li>
+    <li><a href="/../profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
+    <li><a href="/../settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
+    <li><a href="/slideshow"> Slideshow</a></li>
+    <li style="float:right"><a class="active" href="/"><i class="fa fa-power-off"></i> Sign Out</a></li>
+</ul>
+	<!-- T<img src="photo.png" alt="coverArt" style="width:50%"> -->
+<!-- 	<img src="http://westchesterluxuries.com/email/banneremail.jpg" alt="" border="0" style="width:49%"> -->
+		
+			<div class="photoCarousel">
+			<br>
+			<br>
+			<br>
+			<br>
+				<section class="container">
+					<div id="carousel">
+						<figure><img src="http://westchesterluxuries.com/email/banneremail.jpg"></figure>
+						<figure>Photo 2</figure>
+						<figure>Photo 3</figure>
+						<figure>Photo 4</figure>
+						<figure>Photo 5</figure>
+						<figure>Photo 6</figure>
+						 
+					</div>
+				</section>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+		<p id="navigation">
+			<button id="previous" data-increment="-1">Previous</button>
+			<button id="next" data-increment="1">Next Photo</button>
+		</p>
+		</div>
+		
+		
+		<section id="options">
+			<p>
+				<input id="panel-count" value="120" min="1" max="6" hidden>
+		 </p>
+		<br>
+		<br>
+		<br>
+				<button id="toggle-axis" hidden>Toggle Carousel Axis</button>
+				<button id="toggle-backface-visibility" hidden>Toggle Backface Visibility</button>
+
+		</section>
+		
+		<div class="coverArt">
+			<div class="container">
+			<img src="/static/logic.jpg" alt="profilePicture" style="width:50%">
+			{{ range . }}
+			<h1>Hello {{ .UserN}}</h1>
+			{{ end }}
+			<div class="dropdown">
+				<button onclick="myFunction()" class=".postDropDown">Create a post</button>
+					<div id="myDropdown" class="dropdown-content">
+						<form enctype="multipart/form-data"method="POST" action="/profile">
+									
+							<label for="status">Status: </label> 
+							<textarea type="text" name="statusUpdate" placeholder="What you up to?" rows="3" cols="40"></textarea>
+							<br class="clear" />
+											
+							<label for="uploadPicture">Upload a Picture: </label>
+							<input type="file" name="picture" accept="static/img/*">
+											
+											
+							<label>One field is required.</label><br>
+							<input type="submit" value="Submit Post" />
+									
+						</form>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+		
+
+		
+		
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+		<h3>Recents Posts</h3>
+
+				<div class="posting">
+				<img src="static/img/photo3.jpg" alt="posted Photo or Status" style="width:100%">
+				<div id="stat-container">
+					<div id="stat-info">
+						<div id="num-votes"></div>
+						<img style="float: right; margin: 2px;" src="logo.png" /></div>
+					<div id="gradient-container">
+						<div id="rating"></div>
+						<div id="gradient-bar"></div>
+					</div>
+				</div>
+				
+				<button type="share"><i class="fa fa-share"></i>Share</button>
+				<button type="meme"><i class="fa fa-image"></i> Meme</button>
+				<script src="javascipt/meme.js"></script>
+				<div class="dropdown">
+				<button onclick="commentPost1()" class=".postDropDown"><i class="fa fa-comment"></i> Comment</button>
+					<div id="commentB" class="dropdown-content">
+						<textarea id="commentPost" type="text" rows="3" cols="40" placeholder="What do you think?"></textarea><button><i class='fa fa-mail-reply'></i></button><br>
+					</div>
+				</div>
+			</div>
+		</div>	
+		
+
+	<footer>
+		<p id="footertext">Copyright 2018</p>
+	</footer>
+	</body>
+</html>
