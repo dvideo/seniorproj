@@ -332,7 +332,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         return
     
     default:
-        http.Redirect(res, req, "/", 301)
+        http.Redirect(res, req, "/login", 301)
     }
 }
 func UserAgentBot(req *http.Request)(string,string,string){
@@ -371,7 +371,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     
     err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
     if err != nil { // see below comment - remove the below if statement to get code to work
-        fmt.Println("Username doesn't exist.")
+        fmt.Println("Username or password is inncorrect.")
         http.Redirect(res, req, "/login", 301)
         return
     }
@@ -379,7 +379,7 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))  //crypto/bcrypt: hashedSecret too short to be a bcrypted password
     //fmt.Println(err)
     if err != nil {
-        fmt.Println("Password incorrect.")
+        fmt.Println("Username of password is inncorrect.")
         http.Redirect(res, req, "/login", 301)
         return
     }
