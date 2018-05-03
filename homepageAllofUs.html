@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/format.css">
+
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">All of Us</h1>
+</header>
+<ul id="links">
+    <li><a href="/homepageAllofus"><i class="glyphicon glyphicon-home"></i> Home </a></li>
+    <li><a href="/profile"><i class="glyphicon glyphicon-user"></i> Profile </a></li>
+    <li><a href="/settings"><i class="fa fa-cog fa-spin"></i> Settings</a></li>
+    <li><a href="/slideshow"> Slideshow</a></li>
+    <li style="float:right"><a class="active" href="/"><i class="fa fa-power-off"></i> Sign Out</a></li>
+  </ul>
+  <div style="float:right;">
+  <p>Canvas to fill:</p>
+  <canvas id="myCanvas" width="500" height="500"
+  style="border:1px solid #d3d3d3;">
+  Your browser does not support the HTML5 canvas tag.</canvas>
+
+  <p><button onclick="myCanvas()">Meme</button></p>
+  </div>
+  <div>
+  <p>Image to use:</p>
+  <img id="picture" src="static/img/crazyguy.jpg" alt="Picture">
+  <br>
+  Top Text: <input type="text" id="top"><br><br><br>
+  Bottom Text: <input type="text" id="bottom"><br>
+  </div>
+
+  <script>
+  function myCanvas() {
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    var img = document.getElementById('picture');
+    var top = document.getElementById('top');
+    var bottom = document.getElementById('bottom');
+    var height = img.height;
+    var width = img.width;
+    var width2 = document.getElementById('top').offsetWidth;
+    var width3 = document.getElementById('bottom').offsetWidth;
+    ctx.drawImage(img,10,10);
+    ctx.font = "30px Arial";
+    ctx.fillText(top.value,width/2-width2/2+20,40);
+    ctx.fillText(bottom.value,(width/2-width3/2+20),(height-20));
+  }
+  </script>
+<footer>
+  <p id="footertext">Copyright 2018</p>
+</footer>
+</body>
+
+</html>
