@@ -15,7 +15,7 @@ th {
 }  /* colors can be specified in hex */
 
 body { 
-	background-color:#EBEDEF;
+	background-color:#659DBD;
 }
 /*
 a:link    {
@@ -43,14 +43,14 @@ table, th, td {
 }
 
 header {
-	background-color: black;
+	background-color: 242582;
 	margin-left: -8px;
 	width: 102%;
 	margin-top: -22px;
 }
 
 footer {
-	background-color: black;
+	background-color: 242582;
 	position: fixed;
 	bottom: 30px;
 	margin-bottom: -30px;
