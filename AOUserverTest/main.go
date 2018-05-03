@@ -370,13 +370,15 @@ func loginPage(res http.ResponseWriter, req *http.Request) {
     
     err := db.QueryRow("SELECT Username, Password FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&databaseUsername, &databasePassword)
     if err != nil { // see below comment - remove the below if statement to get code to work
+        fmt.Println("Username doesn't exist.")
         http.Redirect(res, req, "/login", 301)
         return
     }
     
     err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))  //crypto/bcrypt: hashedSecret too short to be a bcrypted password
-    fmt.Println(err)
+    //fmt.Println(err)
     if err != nil {
+        fmt.Println("Password incorrect.")
         http.Redirect(res, req, "/login", 301)
         return
     }
