@@ -159,7 +159,7 @@ func SendMessagemain(usr string, req *http.Request) {
     mail.senderId = "allofusnoreply@gmail.com" //defaul allofus email
     mail.toIds = []string{databaseEmail} //users we are sending alerts to email.
     mail.subject = "Security Alert"
-    mail.body = "Dear "+usr+", \n\nYour AllOfUs account was just signed in from an unknown source. You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasn't you please log in to your account and view your activity in the security section\n\nThank you, AllOfUs Team"
+    mail.body = "Dear "+usr+", \n\nYour AllOfUs account was just signed in from an unknown source "+ IPfunction()+" or device"+Device+". You are getting this email to make sure that this is you if this was you no action is needed. However, if it wasn't you please log in to your account and view your activity in the security section\n\nThank you, AllOfUs Team"
 
     messageBody := mail.BuildMessage()
 
