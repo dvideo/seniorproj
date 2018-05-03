@@ -298,6 +298,9 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     err := db.QueryRow("SELECT Username FROM allofusdbmysql2.UserTable WHERE Username=?", username).Scan(&user)
 
     switch {
+    case err != nil || question!="Yes":
+        http.Error(res, "Server error, unable to create your account.", 500)
+        return
     case err == sql.ErrNoRows:
         //fmt.Println("user = " + username + " password = " + password)
         hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 14)
@@ -319,9 +322,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
         fmt.Println("User created!")
         res.Write([]byte("User created!"))
         return
-    case err != nil || question!="Yes":
-        http.Error(res, "Server error, unable to create your account.", 500)
-        return
+    
     default:
         http.Redirect(res, req, "/", 301)
     }
