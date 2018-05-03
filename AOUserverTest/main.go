@@ -295,6 +295,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
     if question != "Yes" {
         fmt.Println("Error, must by a person")
         http.ServeFile(res, req, "signup.html")
+        return
     }
 
     //if time.Now().Year()-18 >= bday{
