@@ -71,6 +71,38 @@ li.dropdown {
     <li><a href="/slideshow"> Slideshow</a></li>
     <li style="float:right"><a class="active" href="#about"><i class="fa fa-power-off"></i> Sign Out</a></li>
   </ul>
+  <div style="float:right;">
+  <p>Canvas to fill:</p>
+  <canvas id="myCanvas" width="500" height="500"
+  style="border:1px solid #d3d3d3;">
+  Your browser does not support the HTML5 canvas tag.</canvas>
+
+  <p><button onclick="myCanvas()">Meme</button></p>
+  </div>
+  <p>Image to use:</p>
+  <img id="picture" src="/img/crazyguy.jpg" alt="Picture">
+  <br>
+  Top Text: <input type="text" id="top"><br>
+  Bottom Text: <input type="text" id="bottom"><br>
+
+
+  <script>
+  function myCanvas() {
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    var img = document.getElementById('picture');
+    var top = document.getElementById('top');
+    var bottom = document.getElementById('bottom');
+    var height = img.height;
+    var width = img.width;
+    var width2 = document.getElementById('top').offsetWidth;
+    var width3 = document.getElementById('bottom').offsetWidth;
+    ctx.drawImage(img,10,10);
+    ctx.font = "30px Arial";
+    ctx.fillText(top.value,width/2-width2/2+20,40);
+    ctx.fillText(bottom.value,(width/2-width3/2+20),(height-20));
+  }
+  </script>
 <footer>
   <p id="footertext">Copyright 2018</p>
 </footer>
