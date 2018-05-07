@@ -89,7 +89,7 @@
 						<form enctype="multipart/form-data"method="POST" action="/profile">
 									
 							<label for="status">Status: </label> 
-							<textarea type="text" name="statusUpdate" placeholder="What you up to?" rows="3" cols="40"></textarea>
+							<textarea type="text" name="statusUpdate" placeholder="What's up with you?" rows="3" cols="40" pattern="[A-Za-z -]*$" maxlength='256' size="256"></textarea>
 							<br class="clear" />
 											
 							<label for="uploadPicture">Upload a Picture: </label>
@@ -131,7 +131,7 @@
 				<div class="dropdown">
 				<button onclick="commentPost1()" class=".postDropDown"><i class="fa fa-comment"></i> Comment</button>
 					<div id="commentB" class="dropdown-content">
-						<textarea id="commentPost" type="text" rows="3" cols="40" placeholder="What do you think?"></textarea><button><i class='fa fa-mail-reply'></i></button><br>
+						<textarea id="commentPost" type="text" rows="3" cols="40" placeholder="What do you think?" pattern="[A-Za-z -]*$" maxlength='256' size="256"></textarea><button><i class='fa fa-mail-reply'></i></button><br>
 					</div>
 				</div>
 			</div>
