@@ -59,8 +59,9 @@
 								<form method="POST" action="/settings">
 											
 									<label for="status">New Name?: </label> <br>
-									<input type="text" name="fName" placeholder="Enter first name:"></input><br>
-									<input type="text" name="lName" placeholder="Enter last name:"></input>
+									<input type="text" name="fName" placeholder="Enter first name:" pattern="[A-Za-z -]*$" maxlength='25' size="28" required></input><br>
+									<input type="text" name="lName" placeholder="Enter last name:" pattern="[A-Za-z -]*$" maxlength='25' size="28" required></input>
+
 									<br class="clear" />
 										
 									<input type="submit" value="Submit Change" />
@@ -77,7 +78,7 @@
 									<form method="POST" action="/settings">
 												
 										<label for="status">New User Name?: </label> <br>
-										<input type="text" name="UserName" placeholder="Enter new UserName:"></input><br>
+										<input type="text" name="UserName" placeholder="Enter new UserName:" pattern="[A-Za-z -]*$" maxlength='25' size="28" required></input><br>
 										<br class="clear" />
 											
 										<input type="submit" value="Submit Change" />
