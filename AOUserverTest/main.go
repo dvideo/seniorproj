@@ -328,11 +328,12 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
             return
         }
         fmt.Println("User created!")
-        res.Write([]byte("User created!"))
+        http.Redirect(res, req, "/login", 301)
+        //res.Write([]byte("User created!"))
         return
     
     default:
-        http.Redirect(res, req, "/login", 301)
+        http.Redirect(res, req, "/signup", 301)
     }
 }
 func UserAgentBot(req *http.Request)(string,string,string){
@@ -582,14 +583,22 @@ func settings(res http.ResponseWriter, req *http.Request) {
     fmt.Println("change name")
     
     if (fName != "" && lName != ""){
-        db.QueryRow("UPDATE allofusdbmysql2.UserTable SET fName = ?, lName = ? WHERE Username=?", fName, lName, cookieUserName)
-        fmt.Println("change name")
+        db.QueryRow("UPDATE allofusdbmysql2.userTable SET fName=?, lName=? WHERE Username=?", fName, lName, cookieUserName)
+        fmt.Println("Name changed")
+        http.ServeFile(res, req, "settings.html")
+        return
     }
     if usrN != ""{
-        db.QueryRow("UPDATE allofusdbmysql2.UserTable SET Username = ? WHERE Username=?", usrN, cookieUserName)
-        fmt.Println("change UserName")
-    }
-    
+        if (rowExists("SELECT Email FROM allofusdbmysql2.userTable WHERE Username=?",usrN)) {
+            fmt.Println("Error, username already exists.")
+            http.ServeFile(res, req, "settings.html")
+            return
+        }else{
+            db.QueryRow("UPDATE allofusdbmysql2.userTable SET Username=? WHERE Username=?", usrN, cookieUserName)
+            fmt.Println("UserName changed")
+            http.ServeFile(res, req, "settings.html")
+        }
+    }   
 }
 
 type UserPerson struct {
