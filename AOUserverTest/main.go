@@ -579,15 +579,15 @@ func settings(res http.ResponseWriter, req *http.Request) {
     lName := req.FormValue("lName")
     usrN := req.FormValue("UserName")
     
-    
-    fmt.Println("change name")
-    
+    fmt.Println(usrN)
+        
     if (fName != "" && lName != ""){
         db.QueryRow("UPDATE allofusdbmysql2.userTable SET fName=?, lName=? WHERE Username=?", fName, lName, cookieUserName)
         fmt.Println("Name changed")
         http.ServeFile(res, req, "settings.html")
         return
     }
+
     if usrN != ""{
         if (rowExists("SELECT Email FROM allofusdbmysql2.userTable WHERE Username=?",usrN)) {
             fmt.Println("Error, username already exists.")
@@ -599,6 +599,7 @@ func settings(res http.ResponseWriter, req *http.Request) {
             http.ServeFile(res, req, "settings.html")
         }
     }   
+
 }
 
 type UserPerson struct {
