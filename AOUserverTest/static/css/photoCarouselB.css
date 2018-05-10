@@ -50,8 +50,8 @@
 				#carousel figure {
 					display: block;
 					position: absolute;
-					width:70%;
-					height: 116px;
+					width:100%;
+					height: 150px;
 					left: 10px;
 					top: 10px;
 					border: 2px solid black;
