@@ -30,7 +30,7 @@
 	
 		<div class="coverArt">
 			<div class="container">
-			<img src="photo.png" alt="profilePicture">
+			<img src="/static/img/logic.jpg" style="height:50%; width: 40%" alt="profilePicture">
 			{{ range . }}
 			<h1>Hello {{ .UserN}}</h1>
 			{{ end }}
@@ -61,7 +61,6 @@
 									<label for="status">New Name?: </label> <br>
 									<input type="text" name="fName" placeholder="Enter first name:" pattern="[A-Za-z -]*$" maxlength='25' size="28" required></input><br>
 									<input type="text" name="lName" placeholder="Enter last name:" pattern="[A-Za-z -]*$" maxlength='25' size="28" required></input>
-
 									<br class="clear" />
 										
 									<input type="submit" value="Submit Change" />
